@@ -1,5 +1,5 @@
-﻿using Sehaty_Plus.Errors;
-using Sehaty_Plus.Infrastructure.Security.Authentication;
+﻿using Sehaty_Plus.Application.Common.Authentication;
+using Sehaty_Plus.Errors;
 namespace Sehaty_Plus
 {
     public static class DependancyInjection
@@ -8,9 +8,9 @@ namespace Sehaty_Plus
         {
             services.AddControllers();
             services.AddOpenApi();
-   
-            services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
             services.AddExceptionHandler<GlobalExceptionHandler>();
+            services.AddProblemDetails();
+
 
             return services;
         }

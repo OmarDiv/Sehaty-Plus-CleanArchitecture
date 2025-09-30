@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Sehaty_Plus.Application.Interfaces;
+using Sehaty_Plus.Application.Common.Authentication;
+using Sehaty_Plus.Application.Common.Interfaces;
+using Sehaty_Plus.Application.Services.Queries;
 using Sehaty_Plus.Domain.Entities;
 using Sehaty_Plus.Infrastructure.Persistence;
-using Sehaty_Plus.Infrastructure.Security.Authentication;
 
 namespace Sehaty_Plus.Infrastructure
 {
@@ -16,6 +17,8 @@ namespace Sehaty_Plus.Infrastructure
             services.
                 DbContextConfig(configuration)
                 .AuthConfig();
+            services.AddScoped<IQueryExecuter, QueryExecuter>();
+            services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
 
             return services;

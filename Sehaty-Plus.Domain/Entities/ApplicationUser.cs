@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
+
 namespace Sehaty_Plus.Domain.Entities
 {
     public class ApplicationUser : IdentityUser
