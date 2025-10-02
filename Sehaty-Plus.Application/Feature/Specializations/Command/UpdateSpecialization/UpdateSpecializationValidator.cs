@@ -2,7 +2,7 @@
 {
     public class UpdateSpecializationValidator : AbstractValidator<UpdateSpecialization>
     {
-        public UpdateSpecializationValidator() 
+        public UpdateSpecializationValidator()
         {
             RuleFor(x => x.Id)
                 .NotEmpty()

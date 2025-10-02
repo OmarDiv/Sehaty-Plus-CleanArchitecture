@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Sehaty_Plus.Application.Feature.Specializations.Command.DeleteSpecialization;
+﻿namespace Sehaty_Plus.Application.Feature.Specializations.Command.DeleteSpecialization;
 
 public record DeleteSpecialization(int Id) : IRequest<Result>;
 

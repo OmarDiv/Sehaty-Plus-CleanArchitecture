@@ -1,12 +1,18 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Sehaty_Plus.Application.Common.Authentication;
 using Sehaty_Plus.Application.Common.Interfaces;
+using Sehaty_Plus.Application.Feature.Auth.Services;
 using Sehaty_Plus.Application.Services.Queries;
 using Sehaty_Plus.Domain.Entities;
 using Sehaty_Plus.Infrastructure.Persistence;
+using Sehaty_Plus.Infrastructure.Services.Auth;
+using System.Text;
 
 namespace Sehaty_Plus.Infrastructure
 {
@@ -16,9 +22,10 @@ namespace Sehaty_Plus.Infrastructure
         {
             services.
                 DbContextConfig(configuration)
-                .AuthConfig();
+                .AuthConfig(configuration);
             services.AddScoped<IQueryExecuter, QueryExecuter>();
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+            services.AddScoped<IAuthService, AuthService>();
 
 
             return services;
@@ -38,11 +45,32 @@ namespace Sehaty_Plus.Infrastructure
         }
 
 
-        private static IServiceCollection AuthConfig(this IServiceCollection services)
+        private static IServiceCollection AuthConfig(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddIdentity<ApplicationUser, IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>()
                .AddDefaultTokenProviders();
+            var setting = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = setting!.Issuer,
+                    ValidAudience = setting.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(setting!.Key))
+                }
+                ;
+            });
 
             services.AddSingleton<IJwtProvider, JwtProvider>();
 

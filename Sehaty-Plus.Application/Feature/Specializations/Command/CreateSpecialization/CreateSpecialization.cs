@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Sehaty_Plus.Application.Common.Interfaces;
-namespace Sehaty_Plus.Application.Feature.Specializations.Command.CreateSpecialization;
+﻿namespace Sehaty_Plus.Application.Feature.Specializations.Command.CreateSpecialization;
 
 public record CreateSpecialization(string Name, string Description) : IRequest<Result<SpecializationResponse>>;
 

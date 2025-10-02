@@ -1,6 +1,6 @@
 ﻿namespace Sehaty_Plus.Domain.Entities;
 
-public class Specialization
+public class Specialization : AuditableEntity
 {
 
     public int Id { get; set; }

@@ -5,11 +5,13 @@ using Sehaty_Plus.Application.Feature.Specializations.Command.CreateSpecializati
 using Sehaty_Plus.Application.Feature.Specializations.Command.DeleteSpecialization;
 using Sehaty_Plus.Application.Feature.Specializations.Command.ToggleSpecializationActive;
 using Sehaty_Plus.Application.Feature.Specializations.Command.UpdateSpecialization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Sehaty_Plus.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SpecializationsController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
@@ -31,12 +33,12 @@ namespace Sehaty_Plus.Controllers
         public async Task<ActionResult<SpecializationResponse>> Create([FromBody] CreateSpecialization request, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(request, cancellationToken);
-            return result.AsCreatedResult(nameof(GetById), new { id = result.Value.Id });
+            return result.IsSuccess ? result.AsCreatedResult(nameof(GetById), new { id = result.Value.Id }) : result.AsActionResult();
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update([FromRoute] int id,[FromBody] UpdateSpecializationDto request, CancellationToken cancellationToken)
+        public async Task<ActionResult> Update([FromRoute] int id, [FromBody] UpdateSpecializationDto request, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new UpdateSpecialization(id,request.Name, request.Description), cancellationToken);
+            var result = await _mediator.Send(new UpdateSpecialization(id, request.Name, request.Description), cancellationToken);
             return result.AsNoContentResult();
         }
         [HttpDelete("{id}")]

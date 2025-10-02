@@ -1,7 +1,4 @@
-﻿using Sehaty_Plus.Application.Feature.Specializations.Errors;
-using Sehaty_Plus.Application.Feature.Specializations.Responses;
-
-namespace Sehaty_Plus.Application.Feature.Specializations.Queries.GetSepcializtionById;
+﻿namespace Sehaty_Plus.Application.Feature.Specializations.Queries.GetSepcializtionById;
 
 public record GetSpecializationsById(int Id) : IRequest<Result<SpecializationResponse>>;
 public class GetSpecializtionByIdHandler(IQueryExecuter queryExecuter) : IRequestHandler<GetSpecializationsById, Result<SpecializationResponse>>

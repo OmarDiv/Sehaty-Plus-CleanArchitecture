@@ -10,7 +10,7 @@ namespace Sehaty_Plus.Application.Common.Authentication
     {
         private readonly JwtOptions _options = options.Value;
 
-        public (string token, DateTime expiresIn) GenerateToken(ApplicationUser user)
+        public (string token, int expiresIn) GenerateToken(ApplicationUser user)
         {
             Claim[] claims = [
                 new( JwtRegisteredClaimNames.Sub, user.Id),
@@ -23,17 +23,17 @@ namespace Sehaty_Plus.Application.Common.Authentication
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));
             var singningCreadeintial = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
-            var expiresIn = DateTime.UtcNow.AddHours(_options.ExpirationInMinutes);
+            var expiresIn = _options.ExpirationInMinutes;
 
             var token = new JwtSecurityToken(
                 issuer: _options.Issuer,
                audience: _options.Audience,
                 claims: claims,
-                expires: expiresIn,
+                expires: DateTime.UtcNow.AddMinutes(expiresIn),
                 signingCredentials: singningCreadeintial
 
                );
-            return (token: new JwtSecurityTokenHandler().WriteToken(token), expiresIn);
+            return (token: new JwtSecurityTokenHandler().WriteToken(token), expiresIn * 60);
 
         }
 

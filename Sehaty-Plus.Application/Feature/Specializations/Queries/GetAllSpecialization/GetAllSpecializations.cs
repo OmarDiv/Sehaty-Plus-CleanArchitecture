@@ -1,7 +1,4 @@
-﻿using Sehaty_Plus.Application.Feature.Specializations.Errors;
-using Sehaty_Plus.Application.Feature.Specializations.Responses;
-
-namespace Sehaty_Plus.Application.Feature.Specializations.Queries.GetAllSpecialization;
+﻿namespace Sehaty_Plus.Application.Feature.Specializations.Queries.GetAllSpecialization;
 
 public record GetAllSpecializations() : IRequest<Result<IEnumerable<SpecializationResponse>>>;
 

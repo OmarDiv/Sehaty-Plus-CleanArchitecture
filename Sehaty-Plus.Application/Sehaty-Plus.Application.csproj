@@ -34,7 +34,6 @@
 
 	<ItemGroup>
 		<Folder Include="Common\Mapping\" />
-		<Folder Include="Feature\Auth\Interfaces\" />
 		<Folder Include="Feature\Auth\Queries\" />
 	</ItemGroup>
 
