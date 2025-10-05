@@ -3,7 +3,7 @@
     public record SpecializationResponse(
         int Id,
         string Name,
-        string Description,
-        bool IsActive
-    );
+        string? Description
+        );
+   
 }

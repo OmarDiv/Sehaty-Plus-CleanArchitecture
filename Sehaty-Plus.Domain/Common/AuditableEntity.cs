@@ -1,4 +1,6 @@
-﻿namespace Sehaty_Plus.Domain.Entities
+﻿using Sehaty_Plus.Domain.Entities;
+
+namespace Sehaty_Plus.Domain.Common
 {
     public class AuditableEntity
     {

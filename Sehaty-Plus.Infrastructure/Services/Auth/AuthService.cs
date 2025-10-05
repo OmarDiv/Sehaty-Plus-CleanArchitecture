@@ -1,26 +1,34 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Sehaty_Plus.Application.Common.Authentication;
+using Sehaty_Plus.Application.Common.Interfaces;
+using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterDoctor;
+using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterPatient;
+using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterUser;
 using Sehaty_Plus.Application.Feature.Auth.Errors;
 using Sehaty_Plus.Application.Feature.Auth.Responses;
 using Sehaty_Plus.Application.Feature.Auth.Services;
-using Sehaty_Plus.Domain.Entities;
+using Sehaty_Plus.Domain.Enums;
+using Sehaty_Plus.Infrastructure.Persistence;
 using System.Security.Cryptography;
 
 namespace Sehaty_Plus.Infrastructure.Services.Auth
 {
     public class AuthService(
-        UserManager<ApplicationUser> userManager,
-        IJwtProvider jwtProvider
+        UserManager<ApplicationUser> _userManager,
+        IApplicationDbContext _context,
+        IJwtProvider _jwtProvider
         ) : IAuthService
     {
         private static readonly int _refreshTokenExpiryDays = 14;
         public async Task<Result<AuthResponse>> GetTokenAsync(string email, string password, CancellationToken cancellationToken = default)
         {
-            if (await userManager.FindByEmailAsync(email) is not { } user)
+            if (await _userManager.FindByEmailAsync(email) is not { } user)
                 return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
-            if (!await userManager.CheckPasswordAsync(user, password))
+            if (!await _userManager.CheckPasswordAsync(user, password))
                 return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
-            (string token, int expiresIn) = jwtProvider.GenerateToken(user);
+            (string token, int expiresIn) = _jwtProvider.GenerateToken(user);
             var refreshToken = GenerateRefreshToken();
             var refreshTokenExpiration = DateTime.UtcNow.AddDays(_refreshTokenExpiryDays);
             user.RefreshTokens.Add(new RefreshToken
@@ -28,7 +36,7 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
                 Token = refreshToken,
                 ExpiresOn = refreshTokenExpiration,
             });
-            var isUpdated = await userManager.UpdateAsync(user);
+            var isUpdated = await _userManager.UpdateAsync(user);
             if (!isUpdated.Succeeded)
                 return Result.Failure<AuthResponse>(UserErrors.FailedToUpdateUser);
             return Result.Success(new AuthResponse(
@@ -43,22 +51,22 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
         }
         public async Task<Result<AuthResponse>> GetRefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken = default)
         {
-            if(jwtProvider.ValidateToken(token) is not string userId)
+            if (_jwtProvider.ValidateToken(token) is not string userId)
                 return Result.Failure<AuthResponse>(UserErrors.InvalidUserOrRefershToken);
-            if (await userManager.FindByIdAsync(userId) is not { } user)
+            if (await _userManager.FindByIdAsync(userId) is not { } user)
                 return Result.Failure<AuthResponse>(UserErrors.InvalidUserOrRefershToken);
-            if(user.RefreshTokens.SingleOrDefault(rt => rt.Token == refreshToken && rt.IsActive) is not { } oldRefreshToken)
+            if (user.RefreshTokens.SingleOrDefault(rt => rt.Token == refreshToken && rt.IsActive) is not { } oldRefreshToken)
                 return Result.Failure<AuthResponse>(UserErrors.InvalidUserOrRefershToken);
             oldRefreshToken.RevokedOn = DateTime.UtcNow;
-            (string newToken, int expiresIn)  = jwtProvider.GenerateToken(user);
+            (string newToken, int expiresIn) = _jwtProvider.GenerateToken(user);
             var newRefreshToken = GenerateRefreshToken();
-            var refreshTokenExpiration = DateTime.UtcNow.AddDays(_refreshTokenExpiryDays); 
+            var refreshTokenExpiration = DateTime.UtcNow.AddDays(_refreshTokenExpiryDays);
             user.RefreshTokens.Add(new RefreshToken
             {
                 Token = newRefreshToken,
                 ExpiresOn = refreshTokenExpiration,
             });
-            var isUpdated = await userManager.UpdateAsync(user);
+            var isUpdated = await _userManager.UpdateAsync(user);
             if (!isUpdated.Succeeded)
                 return Result.Failure<AuthResponse>(UserErrors.FailedToUpdateUser);
             return Result.Success(new AuthResponse(
@@ -76,18 +84,176 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
 
         public async Task<Result> RevokeRefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken = default)
         {
-            if(jwtProvider.ValidateToken(token) is not string userId)
+            if (_jwtProvider.ValidateToken(token) is not string userId)
                 return Result.Failure(UserErrors.InvalidUserOrRefershToken);
-            if (await userManager.FindByIdAsync(userId) is not { } user)
+            if (await _userManager.FindByIdAsync(userId) is not { } user)
                 return Result.Failure(UserErrors.InvalidUserOrRefershToken);
             if (user.RefreshTokens.SingleOrDefault(rt => rt.Token == refreshToken && rt.IsActive) is not { } oldRefreshToken)
                 return Result.Failure(UserErrors.InvalidUserOrRefershToken);
             oldRefreshToken.RevokedOn = DateTime.UtcNow;
-            var isUpdated = await userManager.UpdateAsync(user);
+            var isUpdated = await _userManager.UpdateAsync(user);
             if (!isUpdated.Succeeded)
                 return Result.Failure(UserErrors.FailedToUpdateUser);
             return Result.Success();
         }
-    }
 
+        public async Task<Result> RegisterPatientAsync(RegisterPatient request, CancellationToken cancellationToken)
+        {
+            if ((await _userManager.Users.AnyAsync(x => x.Email == request.Email)))
+                return Result.Failure(UserErrors.DuplicatedEmail);
+            if (await _context.Patients.AnyAsync(x => x.NationalId == request.NationalId))
+                return Result.Failure(PateintErrors.DuplicatedNationalId);
+            if (request.Password != request.ConfirmPassword)
+                return Result.Failure(UserErrors.MissMatchPassword);
+            if (await _userManager.Users.AnyAsync(x => x.PhoneNumber == request.PhoneNumber))
+                return Result.Failure(UserErrors.DuplicatedPhoneNumber);
+            if (request.NationalId.Length != 14 || !request.NationalId.All(char.IsDigit))
+                return Result.Failure(PateintErrors.InvalidNationalId);
+            var dbContext = (ApplicationDbContext)_context;
+            var strategy = dbContext.Database.CreateExecutionStrategy();
+            var result = await strategy.ExecuteAsync(async () =>
+             {
+                 await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
+                 try
+                 {
+                     // Create ApplicationUser
+                     var user = new ApplicationUser
+                     {
+                         Email = request.Email,
+                         UserName = request.Email,
+                         FirstName = request.FirstName,
+                         LastName = request.LastName,
+                         PhoneNumber = request.PhoneNumber,
+                         Gender = request.Gender,
+                         Address = request.Address,
+                         UserType = UserType.Patient,
+                     };
+
+                     // Create user with password
+                     var result = await _userManager.CreateAsync(user, request.Password);
+
+                     if (!result.Succeeded)
+                     {
+                         await transaction.RollbackAsync(cancellationToken);
+                         return Result.Failure(UserErrors.InvalidCredentials);
+
+                     }
+                     // Create Patient record
+                     var patient = new Patient
+                     {
+                         UserId = user.Id,
+                         NationalId = request.NationalId,
+                         DateOfBirth = request.DateOfBirth,
+                         BloodType = request.BloodType,
+                         EmergencyContact = request.EmergencyContact,
+                         Allergies = request.Allergies
+                     };
+
+                     await _context.Patients.AddAsync(patient);
+                     await _context.SaveChangesAsync(cancellationToken);
+
+                     // Commit transaction
+                     await transaction.CommitAsync(cancellationToken);
+                     return Result.Success();
+                 }
+                 catch (Exception)
+                 {
+                     await transaction.RollbackAsync(cancellationToken);
+                     return Result.Failure(UserErrors.InvalidCredentials);
+                 }
+             });
+            return result;
+        }
+
+        public async Task<Result> RegisterDoctorAsync(RegisterDoctor request, CancellationToken cancellationToken)
+        {
+            // ✅ Validations خارج ExecutionStrategy
+            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email || x.PhoneNumber == request.PhoneNumber, cancellationToken))
+                return Result.Failure(UserErrors.InvalidCredentials);
+
+            if (request.Password != request.ConfirmPassword)
+                return Result.Failure(UserErrors.MissMatchPassword);
+
+            if (await _context.Doctors.AnyAsync(x => x.LicenseNumber == request.LicenseNumber, cancellationToken))
+                return Result.Failure(UserErrors.InvalidCredentials);
+
+            var dbContext = (ApplicationDbContext)_context;
+            var strategy = dbContext.Database.CreateExecutionStrategy();
+
+            // ✅ ExecutionStrategy wrapper for Transaction
+            return await strategy.ExecuteAsync(async () =>
+            {
+                await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
+
+                try
+                {
+                    var user = new ApplicationUser
+                    {
+                        Email = request.Email,
+                        UserName = request.Email,
+                        FirstName = request.FirstName,
+                        LastName = request.LastName,
+                        PhoneNumber = request.PhoneNumber,
+                        Gender = request.Gender,
+                        Address = request.Address,
+                        UserType = UserType.Doctor,
+                    };
+
+                    var createResult = await _userManager.CreateAsync(user, request.Password);
+
+                    if (!createResult.Succeeded)
+                    {
+                        var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
+                        throw new Exception($"User creation failed: {errors}");
+                    }
+
+                    var doctor = new Doctor
+                    {
+                        UserId = user.Id,
+                        LicenseNumber = request.LicenseNumber,
+                        YearsOfExperience = request.YearsOfExperience,
+                        Biography = request.Biography,
+                        Education = request.Education,
+                        ConsultationFee = request.ConsultationFee,
+                        BranchId = request.BranchId,
+                        IsVerified = false
+                    };
+
+                    await dbContext.Doctors.AddAsync(doctor, cancellationToken);
+                    await dbContext.SaveChangesAsync(cancellationToken);
+
+                    await transaction.CommitAsync(cancellationToken);
+
+                    return Result.Success();
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                    return Result.Failure(UserErrors.InvalidCredentials);
+                }
+            });
+        }
+
+        public async Task<Result> RegisterUserAsync(RegisterAdmin request, CancellationToken cancellationToken)
+        {
+            if ((await _userManager.Users.AnyAsync(x => x.Email == request.Email)))
+                return Result.Failure(UserErrors.DuplicatedEmail);
+
+            var user = new ApplicationUser
+            {
+                Email = request.Email,
+                UserName = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Gender = Gender.Male,
+                UserType = UserType.Admin
+            };
+            var result = await _userManager.CreateAsync(user, request.Password);
+            if (result.Succeeded)
+                return Result.Success();
+
+            var error = result.Errors.First();
+            return Result.Failure(new(error.Code,error.Description, StatusCodes.Status400BadRequest));
+        }
+    }
 }

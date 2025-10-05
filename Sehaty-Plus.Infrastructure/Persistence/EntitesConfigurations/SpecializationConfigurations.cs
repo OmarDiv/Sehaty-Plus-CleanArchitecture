@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Sehaty_Plus.Domain.Entities;
 
 namespace Sehaty_Plus.Infrastructure.Persistence.EntitesConfigurations
 {
@@ -8,6 +7,12 @@ namespace Sehaty_Plus.Infrastructure.Persistence.EntitesConfigurations
     {
         public void Configure(EntityTypeBuilder<Specialization> builder)
         {
+            builder.HasIndex(x => x.Name).IsUnique();
+            builder.Property(x => x.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+            builder.Property(x => x.Description)
+                .HasMaxLength(300);
         }
     }
 }

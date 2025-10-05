@@ -1,4 +1,6 @@
-﻿namespace Sehaty_Plus.Domain.Entities;
+﻿using Sehaty_Plus.Domain.Common;
+
+namespace Sehaty_Plus.Domain.Entities;
 
 public class Specialization : AuditableEntity
 {

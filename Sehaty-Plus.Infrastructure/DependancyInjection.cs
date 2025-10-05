@@ -3,13 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Sehaty_Plus.Application.Common.Authentication;
 using Sehaty_Plus.Application.Common.Interfaces;
 using Sehaty_Plus.Application.Feature.Auth.Services;
 using Sehaty_Plus.Application.Services.Queries;
-using Sehaty_Plus.Domain.Entities;
 using Sehaty_Plus.Infrastructure.Persistence;
 using Sehaty_Plus.Infrastructure.Services.Auth;
 using System.Text;
@@ -24,7 +22,8 @@ namespace Sehaty_Plus.Infrastructure
                 DbContextConfig(configuration)
                 .AuthConfig(configuration);
             services.AddScoped<IQueryExecuter, QueryExecuter>();
-            services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+            services.AddScoped<IApplicationDbContext>(provider =>
+                provider.GetRequiredService<ApplicationDbContext>());
             services.AddScoped<IAuthService, AuthService>();
 
 

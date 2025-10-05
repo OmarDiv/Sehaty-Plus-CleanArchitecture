@@ -1,11 +1,13 @@
-﻿using Sehaty_Plus.Application.Feature.Specializations.Queries.GetAllSpecialization;
-using Sehaty_Plus.Application.Feature.Specializations.Queries.GetSepcializtionById;
-using Sehaty_Plus.Application.Feature.Specializations.Responses;
+﻿using Microsoft.AspNetCore.Authorization;
 using Sehaty_Plus.Application.Feature.Specializations.Command.CreateSpecialization;
 using Sehaty_Plus.Application.Feature.Specializations.Command.DeleteSpecialization;
 using Sehaty_Plus.Application.Feature.Specializations.Command.ToggleSpecializationActive;
 using Sehaty_Plus.Application.Feature.Specializations.Command.UpdateSpecialization;
-using Microsoft.AspNetCore.Authorization;
+using Sehaty_Plus.Application.Feature.Specializations.Queries.GetAllSpecialization;
+using Sehaty_Plus.Application.Feature.Specializations.Queries.GetAllSpecializationsDetailed;
+using Sehaty_Plus.Application.Feature.Specializations.Queries.GetSepcializtionById;
+using Sehaty_Plus.Application.Feature.Specializations.Queries.GetSpecializationByIdDetailed;
+using Sehaty_Plus.Application.Feature.Specializations.Responses;
 
 namespace Sehaty_Plus.Controllers
 {
@@ -16,43 +18,73 @@ namespace Sehaty_Plus.Controllers
     {
         private readonly IMediator _mediator = mediator;
 
+        // ========== للـ Users ==========
+
         [HttpGet]
+        //[Authorize(Roles = "User,Admin")]
         public async Task<ActionResult<IEnumerable<SpecializationResponse>>> GetAll()
         {
             var result = await _mediator.Send(new GetAllSpecializations());
             return result.AsActionResult();
-
         }
-        [HttpGet("{id}", Name = "GetById")]
-        public async Task<ActionResult<SpecializationResponse>> GetById([FromRoute] int id, CancellationToken ancellationToken)
+
+        [HttpGet("{id}")]
+        //[Authorize(Roles = "User,Admin")]
+        public async Task<ActionResult<SpecializationResponse>> GetById([FromRoute] int id)
         {
-            var result = await _mediator.Send(new GetSpecializationsById(id), ancellationToken);
+            var result = await _mediator.Send(new GetSpecializationById(id));
             return result.AsActionResult();
         }
-        [HttpPost("")]
-        public async Task<ActionResult<SpecializationResponse>> Create([FromBody] CreateSpecialization request, CancellationToken cancellationToken)
+        // ========== للـ Admins فقط ==========
+
+        [HttpGet("admin")]
+       // [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<SpecializationDetailedResponse>>> GetAllDetailed()
         {
-            var result = await _mediator.Send(request, cancellationToken);
-            return result.IsSuccess ? result.AsCreatedResult(nameof(GetById), new { id = result.Value.Id }) : result.AsActionResult();
+            var result = await _mediator.Send(new GetAllSpecializationsDetailed());
+            return result.AsActionResult();
         }
+
+        [HttpGet("admin/{id}")]
+       // [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<SpecializationDetailedResponse>> GetByIdDetailed([FromRoute] int id)
+        {
+            var result = await _mediator.Send(new GetSpecializationByIdDetailed(id));
+            return result.AsActionResult();
+        }
+
+        [HttpPost]
+      //  [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<SpecializationDetailedResponse>> Create([FromBody] CreateSpecialization request)
+        {
+            var result = await _mediator.Send(request);
+            return result.IsSuccess
+                ? result.AsCreatedResult(nameof(GetByIdDetailed), new { id = result.Value.Id })
+                : result.AsActionResult();
+        }
+
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update([FromRoute] int id, [FromBody] UpdateSpecializationDto request, CancellationToken cancellationToken)
+       // [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Update([FromRoute] int id, [FromBody] UpdateSpecializationDto request)
         {
-            var result = await _mediator.Send(new UpdateSpecialization(id, request.Name, request.Description), cancellationToken);
-            return result.AsNoContentResult();
-        }
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
-        {
-            var result = await _mediator.Send(new DeleteSpecialization(id), cancellationToken);
-            return result.AsNoContentResult();
-        }
-        [HttpPatch("{id}/toggle-active")]
-        public async Task<ActionResult> ToggleActivation([FromRoute] int id, CancellationToken cancellationToken)
-        {
-            var result = await _mediator.Send(new ToggleSpecializationActive(id), cancellationToken);
+            var result = await _mediator.Send(new UpdateSpecialization(id, request.Name, request.Description));
             return result.AsNoContentResult();
         }
 
+        [HttpDelete("{id}")]
+       // [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Delete([FromRoute] int id)
+        {
+            var result = await _mediator.Send(new DeleteSpecialization(id));
+            return result.AsNoContentResult();
+        }
+
+        [HttpPatch("{id}/toggle-active")]
+       // [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> ToggleActivation([FromRoute] int id)
+        {
+            var result = await _mediator.Send(new ToggleSpecializationActive(id));
+            return result.AsNoContentResult();
+        }
     }
 }

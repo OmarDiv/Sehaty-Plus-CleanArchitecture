@@ -6,7 +6,7 @@ public class GetAllSpecializationsHandler(IQueryExecuter queryExecuter) : IReque
 {
     public async Task<Result<IEnumerable<SpecializationResponse>>> Handle(GetAllSpecializations request, CancellationToken cancellationToken)
     {
-        var Response = await queryExecuter.Query<SpecializationResponse>("Select * from Specializations");
+        var Response = await queryExecuter.Query<SpecializationResponse>(" Select Id , Name , Description from Specializations Where IsActive = 1 ");
         if (Response is null)
             return Result.Failure<IEnumerable<SpecializationResponse>>(SpecializationErrors.SpecializationNotFound);
         return Result.Success(Response);

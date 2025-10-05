@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Sehaty_Plus.Application.Common.Interfaces;
-using Sehaty_Plus.Domain;
-using Sehaty_Plus.Domain.Entities;
+using Sehaty_Plus.Domain.Common;
 using System.Reflection;
 using System.Security.Claims;
 namespace Sehaty_Plus.Infrastructure.Persistence;
@@ -11,9 +10,18 @@ namespace Sehaty_Plus.Infrastructure.Persistence;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor _httpContextAccessor) : IdentityDbContext<ApplicationUser>(options), IApplicationDbContext
 {
     public DbSet<Specialization> Specializations { get; set; }
+    public DbSet<Doctor> Doctors { get; set; }
+    public DbSet<Patient> Patients { get; set; }
+    public DbSet<Branch> Branches { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        var cascade = modelBuilder.Model.GetEntityTypes()
+              .SelectMany(t => t.GetForeignKeys())
+              .Where(fk => fk.DeleteBehavior == DeleteBehavior.Cascade && !fk.IsOwnership);
+        foreach (var fk in cascade)
+            fk.DeleteBehavior = DeleteBehavior.Restrict;
         base.OnModelCreating(modelBuilder);
     }
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

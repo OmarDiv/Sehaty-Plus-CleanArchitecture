@@ -23,10 +23,11 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseSerilogRequestLogging();
-app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
+app.UseExceptionHandler();
+app.UseCors();
+app.UseSerilogRequestLogging();
 
 app.UseAuthorization();
 

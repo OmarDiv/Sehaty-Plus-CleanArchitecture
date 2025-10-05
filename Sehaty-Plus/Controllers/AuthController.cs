@@ -1,5 +1,9 @@
-﻿using Sehaty_Plus.Application.Feature.Auth.Commands.GetRefreshToken;
+﻿using Microsoft.AspNetCore.Authorization;
+using Sehaty_Plus.Application.Feature.Auth.Commands.GetRefreshToken;
 using Sehaty_Plus.Application.Feature.Auth.Commands.Login;
+using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterDoctor;
+using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterPatient;
+using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterUser;
 using Sehaty_Plus.Application.Feature.Auth.Commands.RevokeRefreshToken;
 using Sehaty_Plus.Application.Feature.Auth.Responses;
 
@@ -32,11 +36,23 @@ namespace Sehaty_Plus.Controllers
             var result = await _mediator.Send(request, cancellationToken);
             return result.AsNoContentResult();
         }
-
-        //[HttpPost("register")]
-        //public async Task<ActionResult> Register()
-        //{
-        //    return Ok("Register endpoint");
-        //}
+        [HttpPost("register/patient")]
+        public async Task<ActionResult<Result>> RegisterPatient([FromBody] RegisterPatient request,CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(request, cancellationToken);
+            return result.AsNoContentResult();
+        }
+        [HttpPost("register/doctor")]
+        public async Task<ActionResult<Result>> RegisterDoctor([FromBody] RegisterDoctor request,CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(request, cancellationToken);
+            return result.AsNoContentResult();
+        }
+        [HttpPost("register/Admin")]
+        public async Task<ActionResult<Result>> RegisterAdmin([FromBody] RegisterAdmin request,CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(request,cancellationToken);
+            return result.AsNoContentResult();
+        } 
     }
 }

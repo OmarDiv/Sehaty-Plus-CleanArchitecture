@@ -15,5 +15,7 @@
         public static readonly Error InvalidRoles = new("User.InvalidRoles", "Invalid Roles.", StatusCodes.Status401Unauthorized);
         public static readonly Error UserAlreadyHasPassword = new("User.AlreadyHasPassword", "User already has a password set", StatusCodes.Status400BadRequest);
         public static readonly Error UserAccountAlreadySetup = new("User.AccountAlreadySetup", "User account is already set up and confirmed", StatusCodes.Status409Conflict);
+        public static readonly Error DuplicatedPhoneNumber = new("User.DuplicatedPhoneNumber", "Another User With The Same PhoneNumber Already Exsist.", StatusCodes.Status409Conflict);
+        public static readonly Error MissMatchPassword = new("User.MissMatchPassword", "ConfirmPassword do not match your Password", StatusCodes.Status409Conflict);
     }
 }
