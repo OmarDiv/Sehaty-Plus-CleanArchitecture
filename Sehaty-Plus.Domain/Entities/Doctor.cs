@@ -5,7 +5,7 @@
         public Guid Id { get; set; }
         public string UserId { get; set; } = string.Empty;
         public string LicenseNumber { get; set; } = string.Empty;
-       // public int SpecializationId { get; set; }
+        // public int SpecializationId { get; set; }
         public int YearsOfExperience { get; set; }
         public string? Education { get; set; }
         public string? Biography { get; set; }

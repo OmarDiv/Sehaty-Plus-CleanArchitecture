@@ -1,4 +1,4 @@
-﻿using Sehaty_Plus.Application.Common.Authentication;
+﻿using Hangfire;
 using Sehaty_Plus.Errors;
 namespace Sehaty_Plus
 {
@@ -18,8 +18,21 @@ namespace Sehaty_Plus
             services.AddOpenApi();
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
+            services.AddBackgroundJobsConfig(configuration);
 
+            return services;
+        }
 
+        private static IServiceCollection AddBackgroundJobsConfig(this IServiceCollection services, IConfiguration configuration)
+        {
+
+            services.AddHangfire(config => config
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(configuration.GetConnectionString("HangfireConnection")));
+
+            services.AddHangfireServer();
             return services;
         }
     }

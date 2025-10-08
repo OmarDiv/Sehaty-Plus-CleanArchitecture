@@ -1,6 +1,8 @@
-﻿using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterDoctor;
+﻿using Sehaty_Plus.Application.Feature.Auth.Commands.ConfirmEmail;
+using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterAdmin;
+using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterDoctor;
 using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterPatient;
-using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterUser;
+using Sehaty_Plus.Application.Feature.Auth.Commands.ResendConfirmEmail;
 namespace Sehaty_Plus.Application.Feature.Auth.Services
 {
     public interface IAuthService
@@ -11,9 +13,10 @@ namespace Sehaty_Plus.Application.Feature.Auth.Services
         Task<Result> RevokeRefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken = default);
         Task<Result> RegisterPatientAsync(RegisterPatient request, CancellationToken cancellationToken);
         Task<Result> RegisterDoctorAsync(RegisterDoctor request, CancellationToken cancellationToken);
-        Task<Result> RegisterUserAsync(RegisterAdmin request, CancellationToken cancellationToken);
-        //Task<Result> ConfirmEmailAsync(ConfirmEmailRequest request);
-        //Task<Result> ResendConfirmEmailAsync(ResendConfirmtionEmailRequest request, CancellationToken cancellationToken);
+        Task<Result> RegisterAdminAsync(RegisterAdmin request, CancellationToken cancellationToken);
+
+        Task<Result> ConfirmEmailAsync(ConfirmEmail request, CancellationToken cancellationToken);
+        Task<Result> ResendConfirmEmailAsync(ResendConfirmEmail request, CancellationToken cancellationToken);
         //Task<Result> SendResetPasswordCodeAsync(string email);
         //Task<Result> ConfirmResetPasswordAsync(ResetPasswordRequest request);
     }

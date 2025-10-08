@@ -5,11 +5,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Sehaty_Plus.Application.Common.Authentication;
+using Sehaty_Plus.Application.Common.EmailService;
 using Sehaty_Plus.Application.Common.Interfaces;
 using Sehaty_Plus.Application.Feature.Auth.Services;
 using Sehaty_Plus.Application.Services.Queries;
 using Sehaty_Plus.Infrastructure.Persistence;
 using Sehaty_Plus.Infrastructure.Services.Auth;
+using Sehaty_Plus.Infrastructure.Services.Email;
 using System.Text;
 
 namespace Sehaty_Plus.Infrastructure
@@ -21,10 +23,15 @@ namespace Sehaty_Plus.Infrastructure
             services.
                 DbContextConfig(configuration)
                 .AuthConfig(configuration);
-            services.AddScoped<IQueryExecuter, QueryExecuter>();
+
+            services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
+
             services.AddScoped<IApplicationDbContext>(provider =>
                 provider.GetRequiredService<ApplicationDbContext>());
+
+            services.AddScoped<IQueryExecuter, QueryExecuter>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IEmailSenderService, EmailSenderService>();
 
 
             return services;
@@ -70,7 +77,14 @@ namespace Sehaty_Plus.Infrastructure
                 }
                 ;
             });
-
+            services.Configure<IdentityOptions>(
+                options =>
+                {
+                    options.Password.RequiredLength = 8;
+                    options.SignIn.RequireConfirmedEmail = true;
+                    options.User.RequireUniqueEmail = true;
+                }
+                );
             services.AddSingleton<IJwtProvider, JwtProvider>();
 
             return services;

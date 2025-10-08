@@ -47,6 +47,7 @@ namespace Sehaty_Plus.Application.Common.Authentication
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
+                    ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = symmeticSecurityKey,
                     ClockSkew = TimeSpan.Zero,

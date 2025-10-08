@@ -1,24 +1,33 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Sehaty_Plus.Application.Common.Authentication;
+using Sehaty_Plus.Application.Common.EmailService;
 using Sehaty_Plus.Application.Common.Interfaces;
+using Sehaty_Plus.Application.Feature.Auth.Commands.ConfirmEmail;
+using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterAdmin;
 using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterDoctor;
 using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterPatient;
-using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterUser;
+using Sehaty_Plus.Application.Feature.Auth.Commands.ResendConfirmEmail;
 using Sehaty_Plus.Application.Feature.Auth.Errors;
 using Sehaty_Plus.Application.Feature.Auth.Responses;
 using Sehaty_Plus.Application.Feature.Auth.Services;
 using Sehaty_Plus.Domain.Enums;
 using Sehaty_Plus.Infrastructure.Persistence;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Sehaty_Plus.Infrastructure.Services.Auth
 {
     public class AuthService(
         UserManager<ApplicationUser> _userManager,
         IApplicationDbContext _context,
-        IJwtProvider _jwtProvider
+        IJwtProvider _jwtProvider,
+        IEmailSenderService _emailSenderService,
+        SignInManager<ApplicationUser> _signInManager,
+        ILogger<AuthService> _logger
         ) : IAuthService
     {
         private static readonly int _refreshTokenExpiryDays = 14;
@@ -26,28 +35,32 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
         {
             if (await _userManager.FindByEmailAsync(email) is not { } user)
                 return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
-            if (!await _userManager.CheckPasswordAsync(user, password))
-                return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
-            (string token, int expiresIn) = _jwtProvider.GenerateToken(user);
-            var refreshToken = GenerateRefreshToken();
-            var refreshTokenExpiration = DateTime.UtcNow.AddDays(_refreshTokenExpiryDays);
-            user.RefreshTokens.Add(new RefreshToken
+
+            var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
+            if (result.Succeeded)
             {
-                Token = refreshToken,
-                ExpiresOn = refreshTokenExpiration,
-            });
-            var isUpdated = await _userManager.UpdateAsync(user);
-            if (!isUpdated.Succeeded)
-                return Result.Failure<AuthResponse>(UserErrors.FailedToUpdateUser);
-            return Result.Success(new AuthResponse(
-                user.Id,
-                user.Email,
-                user.FirstName,
-                user.LastName,
-                token,
-                expiresIn,
-                refreshToken,
-               refreshTokenExpiration));
+                (string token, int expiresIn) = _jwtProvider.GenerateToken(user);
+                var refreshToken = GenerateRefreshToken();
+                var refreshTokenExpiration = DateTime.UtcNow.AddDays(_refreshTokenExpiryDays);
+                user.RefreshTokens.Add(new RefreshToken
+                {
+                    Token = refreshToken,
+                    ExpiresOn = refreshTokenExpiration,
+                });
+                var isUpdated = await _userManager.UpdateAsync(user);
+                if (!isUpdated.Succeeded)
+                    return Result.Failure<AuthResponse>(UserErrors.FailedToUpdateUser);
+                return Result.Success(new AuthResponse(
+                    user.Id,
+                    user.Email,
+                    user.FirstName,
+                    user.LastName,
+                    token,
+                    expiresIn,
+                    refreshToken,
+                   refreshTokenExpiration));
+            }
+            return Result.Failure<AuthResponse>(result.IsNotAllowed ? UserErrors.EmailNotConfirmed : UserErrors.InvalidCredentials);
         }
         public async Task<Result<AuthResponse>> GetRefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken = default)
         {
@@ -116,7 +129,6 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
                  await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
                  try
                  {
-                     // Create ApplicationUser
                      var user = new ApplicationUser
                      {
                          Email = request.Email,
@@ -129,7 +141,6 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
                          UserType = UserType.Patient,
                      };
 
-                     // Create user with password
                      var result = await _userManager.CreateAsync(user, request.Password);
 
                      if (!result.Succeeded)
@@ -138,7 +149,6 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
                          return Result.Failure(UserErrors.InvalidCredentials);
 
                      }
-                     // Create Patient record
                      var patient = new Patient
                      {
                          UserId = user.Id,
@@ -152,7 +162,6 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
                      await _context.Patients.AddAsync(patient);
                      await _context.SaveChangesAsync(cancellationToken);
 
-                     // Commit transaction
                      await transaction.CommitAsync(cancellationToken);
                      return Result.Success();
                  }
@@ -167,7 +176,6 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
 
         public async Task<Result> RegisterDoctorAsync(RegisterDoctor request, CancellationToken cancellationToken)
         {
-            // ✅ Validations خارج ExecutionStrategy
             if (await _userManager.Users.AnyAsync(x => x.Email == request.Email || x.PhoneNumber == request.PhoneNumber, cancellationToken))
                 return Result.Failure(UserErrors.InvalidCredentials);
 
@@ -180,7 +188,6 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
             var dbContext = (ApplicationDbContext)_context;
             var strategy = dbContext.Database.CreateExecutionStrategy();
 
-            // ✅ ExecutionStrategy wrapper for Transaction
             return await strategy.ExecuteAsync(async () =>
             {
                 await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
@@ -234,7 +241,7 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
             });
         }
 
-        public async Task<Result> RegisterUserAsync(RegisterAdmin request, CancellationToken cancellationToken)
+        public async Task<Result> RegisterAdminAsync(RegisterAdmin request, CancellationToken cancellationToken)
         {
             if ((await _userManager.Users.AnyAsync(x => x.Email == request.Email)))
                 return Result.Failure(UserErrors.DuplicatedEmail);
@@ -250,10 +257,51 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
             };
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
+            {
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                _logger.LogInformation("Admin registered with Code: {code}", code);
+                await _emailSenderService.SendConfirmationEmailAsync(user, code);
                 return Result.Success();
-
+            }
             var error = result.Errors.First();
-            return Result.Failure(new(error.Code,error.Description, StatusCodes.Status400BadRequest));
+            return Result.Failure(new(error.Code, error.Description, StatusCodes.Status400BadRequest));
+        }
+
+        public async Task<Result> ConfirmEmailAsync(ConfirmEmail request, CancellationToken cancellationToken)
+        {
+            if (await _userManager.FindByIdAsync(request.UserId) is not { } user)
+                return Result.Failure(UserErrors.InvaildCode);
+            if (user.EmailConfirmed)
+                return Result.Failure(UserErrors.DuplicatedConfirmation);
+            var code = string.Empty;
+            try
+            {
+                code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Code));
+
+            }
+            catch (FormatException)
+            {
+                return Result.Failure(UserErrors.InvaildCode);
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            if (result.Succeeded)
+                return Result.Success();
+            var error = result.Errors.First();
+            return Result.Failure(new(error.Code, error.Description, StatusCodes.Status400BadRequest));
+        }
+
+        public async Task<Result> ResendConfirmEmailAsync(ResendConfirmEmail request, CancellationToken cancellationToken)
+        {
+            if (await _userManager.FindByEmailAsync(request.Email) is not { } user)
+                return Result.Success();
+            if (user.EmailConfirmed)
+                return Result.Failure(UserErrors.DuplicatedConfirmation);
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            _logger.LogInformation("Email confirmation Code: {code}", code);
+            await _emailSenderService.SendConfirmationEmailAsync(user, code);
+            return Result.Success();
         }
     }
 }
