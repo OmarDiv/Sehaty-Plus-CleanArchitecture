@@ -1,5 +1,7 @@
 ﻿using Hangfire;
+using Microsoft.AspNetCore.RateLimiting;
 using Sehaty_Plus.Errors;
+using System.Threading.RateLimiting;
 namespace Sehaty_Plus
 {
     public static class DependancyInjection
@@ -19,6 +21,20 @@ namespace Sehaty_Plus
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
             services.AddBackgroundJobsConfig(configuration);
+            services.AddRateLimiter(rateLimiterOptions =>
+            {
+                rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+                rateLimiterOptions.AddPolicy("ipLimit", httpcontext =>
+                    RateLimitPartition.GetFixedWindowLimiter(
+                       partitionKey: httpcontext.Connection.RemoteIpAddress?.ToString(),
+                       factory: _ => new FixedWindowRateLimiterOptions
+                       {
+                           PermitLimit = 5,
+                           Window = TimeSpan.FromMinutes(1)
+                       })
+                    );
+            });
 
             return services;
         }

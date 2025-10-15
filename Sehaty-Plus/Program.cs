@@ -37,11 +37,12 @@ app.UseHangfireDashboard("/Jobs",
     }
 );
 
-
 app.UseHttpsRedirection();
 app.UseExceptionHandler();
-app.UseCors();
 app.UseSerilogRequestLogging();
+app.UseRouting();
+app.UseCors();
+app.UseRateLimiter();
 app.UseAuthorization();
 app.MapControllers();
 

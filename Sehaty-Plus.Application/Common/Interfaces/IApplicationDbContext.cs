@@ -6,6 +6,8 @@
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Branch> Branches { get; set; }
+        public DbSet<Otp> Otps { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
     }

@@ -16,6 +16,7 @@ namespace Sehaty_Plus.Domain.Entities
         public Doctor? Doctor { get; set; }
 
         public ICollection<RefreshToken> RefreshTokens { get; set; } = [];
+        public ICollection<Otp> Otps { get; set; } = [];
     }
 }
 

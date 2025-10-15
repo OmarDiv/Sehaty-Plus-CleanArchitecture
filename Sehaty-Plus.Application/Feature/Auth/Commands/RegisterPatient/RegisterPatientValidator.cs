@@ -32,7 +32,7 @@ namespace Sehaty_Plus.Application.Feature.Auth.Commands.RegisterPatient
 
             RuleFor(x => x.PhoneNumber)
                 .NotEmpty()
-                .Matches(@"^(\+20|0)?1[0125]\d{8}$")
+                .Matches(RegexPatterns.EgyptPhoneNumer)
                 .WithMessage("Invalid Egyptian phone number. Format: 01xxxxxxxxx or +2001xxxxxxxxx");
 
             RuleFor(x => x.NationalId)

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
@@ -6,11 +7,15 @@ using Microsoft.Extensions.Logging;
 using Sehaty_Plus.Application.Common.Authentication;
 using Sehaty_Plus.Application.Common.EmailService;
 using Sehaty_Plus.Application.Common.Interfaces;
+using Sehaty_Plus.Application.Common.SmsService;
+using Sehaty_Plus.Application.Common.SmsService.YourApp.Application.Interfaces.Services;
 using Sehaty_Plus.Application.Feature.Auth.Commands.ConfirmEmail;
+using Sehaty_Plus.Application.Feature.Auth.Commands.ConfirmResetPassword;
 using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterAdmin;
 using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterDoctor;
 using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterPatient;
 using Sehaty_Plus.Application.Feature.Auth.Commands.ResendConfirmEmail;
+using Sehaty_Plus.Application.Feature.Auth.Commands.VerfiyForgetPasswordOtp;
 using Sehaty_Plus.Application.Feature.Auth.Errors;
 using Sehaty_Plus.Application.Feature.Auth.Responses;
 using Sehaty_Plus.Application.Feature.Auth.Services;
@@ -27,7 +32,8 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
         IJwtProvider _jwtProvider,
         IEmailSenderService _emailSenderService,
         SignInManager<ApplicationUser> _signInManager,
-        ILogger<AuthService> _logger
+        ILogger<AuthService> _logger,
+        IOtpService _otpService
         ) : IAuthService
     {
         private static readonly int _refreshTokenExpiryDays = 14;
@@ -302,6 +308,65 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
             _logger.LogInformation("Email confirmation Code: {code}", code);
             await _emailSenderService.SendConfirmationEmailAsync(user, code);
             return Result.Success();
+        }
+        public async Task<Result<string>> SendForgetPasswordOtpAsync(string phoneNumber, CancellationToken cancellationToken)
+        {
+            var user = await _userManager.Users
+                .Include(u => u.Otps)
+                .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber, cancellationToken);
+
+            if (user is null)
+                return Result.Success("OTP sent successfully Check Your Phone");
+
+            var lastOtp = user.Otps.OrderByDescending(x => x.CreatedAt).FirstOrDefault();
+            if (lastOtp != null && lastOtp.CreatedAt.AddMinutes(1) > DateTime.UtcNow)
+                return Result.Failure<string>(
+                    new("TooManyRequests", "You can request a new OTP after 1 minute.", StatusCodes.Status429TooManyRequests)
+                );
+
+            var (otp, otpCode) = _otpService.GenerateOtp(user.Id);
+
+            user.Otps.Add(otp);
+            if (lastOtp is not null)
+                lastOtp.ExpiresAt = DateTime.UtcNow;
+            await _userManager.UpdateAsync(user);
+            BackgroundJob.Enqueue<ISmsService>(sms => sms.SendAsync(phoneNumber, otpCode, CancellationToken.None));
+            return Result.Success("OTP sent successfully Check Your Phone");
+        }
+        public async Task<Result<string>> VerfiyForgetPasswordOtp(VerfiyForgetPasswordOtp request, CancellationToken cancellationToken)
+        {
+            if (await _userManager.Users.Include(u => u.Otps).FirstOrDefaultAsync(u => u.PhoneNumber == request.PhoneNumber, cancellationToken) is not { } user)
+                return Result.Failure<string>(UserErrors.UserNotFound);
+            var entryOtp = _otpService.HashOtpCode(request.OtpCode);
+            var lastOtp = user.Otps.LastOrDefault();
+            if (lastOtp is null || lastOtp.Code != entryOtp || lastOtp.ExpiresAt < DateTime.UtcNow)
+                return Result.Failure<string>(UserErrors.InvalidOrExpiredOtp);
+            lastOtp.ExpiresAt = DateTime.UtcNow;
+            await _userManager.UpdateAsync(user);
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(resetToken));
+            return Result.Success(encodedToken);
+        }
+        public async Task<Result> ConfirmResetPasswordAsync(ConfirmResetPassword request, CancellationToken cancellationToken)
+        {
+            if (request.newPassword != request.confirmPassword)
+                return Result.Failure(UserErrors.MissMatchPassword);
+            if (await _userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == request.PhoneNumber, cancellationToken) is not { } user)
+                return Result.Failure(UserErrors.UserNotFound);
+            var decodedToken = string.Empty;
+            try
+            {
+                decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.resetToken));
+            }
+            catch (FormatException)
+            {
+                return Result.Failure(UserErrors.InvalidCredentials);
+            }
+            var result = await _userManager.ResetPasswordAsync(user, decodedToken, request.newPassword);
+            if (result.Succeeded)
+                return Result.Success();
+            var error = result.Errors.First();
+            return Result.Failure(new(error.Code, error.Description, StatusCodes.Status400BadRequest));
         }
     }
 }

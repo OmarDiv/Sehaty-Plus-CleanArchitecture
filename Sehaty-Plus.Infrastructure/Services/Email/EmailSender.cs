@@ -11,13 +11,9 @@ namespace Sehaty_Plus.Infrastructure.Services.Email
 {
     public class EmailSenderService(
         IHttpContextAccessor httpContextAccessor,
-        UserManager<ApplicationUser> userManager,
-        IOptions<MailSettings> options,
-        ILogger<EmailSenderService> logger) : IEmailSenderService
+        IOptions<MailSettings> options) : IEmailSenderService
     {
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
-        private readonly UserManager<ApplicationUser> _userManager = userManager;
-        private readonly ILogger<EmailSenderService> _logger = logger;
         private readonly MailSettings _mailSettings = options.Value;
 
         public async Task SendConfirmationEmailAsync(ApplicationUser user, string code)

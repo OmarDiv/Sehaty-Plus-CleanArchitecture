@@ -7,11 +7,14 @@ using Microsoft.IdentityModel.Tokens;
 using Sehaty_Plus.Application.Common.Authentication;
 using Sehaty_Plus.Application.Common.EmailService;
 using Sehaty_Plus.Application.Common.Interfaces;
+using Sehaty_Plus.Application.Common.SmsService;
+using Sehaty_Plus.Application.Common.SmsService.YourApp.Application.Interfaces.Services;
 using Sehaty_Plus.Application.Feature.Auth.Services;
 using Sehaty_Plus.Application.Services.Queries;
 using Sehaty_Plus.Infrastructure.Persistence;
 using Sehaty_Plus.Infrastructure.Services.Auth;
 using Sehaty_Plus.Infrastructure.Services.Email;
+using Sehaty_Plus.Infrastructure.Services.Sms;
 using System.Text;
 
 namespace Sehaty_Plus.Infrastructure
@@ -32,6 +35,8 @@ namespace Sehaty_Plus.Infrastructure
             services.AddScoped<IQueryExecuter, QueryExecuter>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEmailSenderService, EmailSenderService>();
+            services.AddTransient<IOtpService, OtpService>();
+            services.AddTransient<ISmsService, TwilioSmsService>();
 
 
             return services;

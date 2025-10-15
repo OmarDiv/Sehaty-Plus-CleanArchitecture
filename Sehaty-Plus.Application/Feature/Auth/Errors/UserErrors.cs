@@ -17,5 +17,6 @@
         public static readonly Error UserAccountAlreadySetup = new("User.AccountAlreadySetup", "User account is already set up and confirmed", StatusCodes.Status409Conflict);
         public static readonly Error DuplicatedPhoneNumber = new("User.DuplicatedPhoneNumber", "Another User With The Same PhoneNumber Already Exsist.", StatusCodes.Status409Conflict);
         public static readonly Error MissMatchPassword = new("User.MissMatchPassword", "ConfirmPassword do not match your Password", StatusCodes.Status409Conflict);
+        public static readonly Error InvalidOrExpiredOtp = new("User.InvalidOrExpiredOtp", "The provided OTP is invalid or has expired.", StatusCodes.Status401Unauthorized);
     }
 }
