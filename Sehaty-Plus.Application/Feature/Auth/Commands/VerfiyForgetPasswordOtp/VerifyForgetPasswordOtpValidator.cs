@@ -1,15 +1,9 @@
 ﻿using Sehaty_Plus.Application.Common.Const;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Sehaty_Plus.Application.Feature.Auth.Commands.VerfiyForgetPasswordOtp
 {
-    public class VerfiyForgetPasswordOtpValidator : AbstractValidator<VerfiyForgetPasswordOtp>
+    public class VerifyForgetPasswordOtpValidator : AbstractValidator<VerifyForgetPasswordOtp>
     {
-        public VerfiyForgetPasswordOtpValidator()
+        public VerifyForgetPasswordOtpValidator()
         {
             RuleFor(x => x.PhoneNumber)
                 .NotEmpty()

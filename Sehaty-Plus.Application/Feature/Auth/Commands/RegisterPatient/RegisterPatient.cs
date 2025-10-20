@@ -10,7 +10,6 @@ namespace Sehaty_Plus.Application.Feature.Auth.Commands.RegisterPatient
         string LastName,
         string PhoneNumber,
         Gender Gender,
-        string? Address,
         string NationalId,
         DateTime DateOfBirth,
         string? BloodType,

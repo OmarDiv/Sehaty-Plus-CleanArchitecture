@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Sehaty_Plus.Infrastructure.Persistence.EntitesConfigurations
 {
-    public class BranchConfigurations : IEntityTypeConfiguration<Branch>
+    public class ClinicConfigurations : IEntityTypeConfiguration<Clinic>
     {
-        public void Configure(EntityTypeBuilder<Branch> builder)
+        public void Configure(EntityTypeBuilder<Clinic> builder)
         {
             // Primary key
             builder.HasKey(b => b.Id);
@@ -15,9 +15,12 @@ namespace Sehaty_Plus.Infrastructure.Persistence.EntitesConfigurations
                 .IsRequired();
             builder.Property(b => b.PhoneNumber)
                 .IsRequired();
-            builder.HasMany(builder => builder.Doctors)
-                .WithOne(doctor => doctor.Branch)
-                .HasForeignKey(doctor => doctor.BranchId);
+            builder.Property(x => x.Longitude)
+                .HasPrecision(10, 6);
+            builder.Property(x => x.Latitude)
+                .HasPrecision(10, 6);
+            builder.HasMany(builder => builder.DoctorClinics)
+                .WithOne(x => x.Clinic);
         }
     }
 }

@@ -4,6 +4,7 @@ using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterAdmin;
 using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterDoctor;
 using Sehaty_Plus.Application.Feature.Auth.Commands.RegisterPatient;
 using Sehaty_Plus.Application.Feature.Auth.Commands.ResendConfirmEmail;
+using Sehaty_Plus.Application.Feature.Auth.Commands.VerfiyForgetPasswordOtp;
 namespace Sehaty_Plus.Application.Feature.Auth.Services
 {
     public interface IAuthService
@@ -18,7 +19,7 @@ namespace Sehaty_Plus.Application.Feature.Auth.Services
         Task<Result> ConfirmEmailAsync(ConfirmEmail request, CancellationToken cancellationToken);
         Task<Result> ResendConfirmEmailAsync(ResendConfirmEmail request, CancellationToken cancellationToken);
         Task<Result<string>> SendForgetPasswordOtpAsync(string phoneNumber, CancellationToken cancellationToken);
-        Task<Result<string>> VerfiyForgetPasswordOtp(Commands.VerfiyForgetPasswordOtp.VerfiyForgetPasswordOtp request, CancellationToken cancellationToken);
+        Task<Result<string>> VerfiyForgetPasswordOtp(VerifyForgetPasswordOtp request, CancellationToken cancellationToken);
         Task<Result> ConfirmResetPasswordAsync(ConfirmResetPassword request , CancellationToken cancellationToken);
     }
 }

@@ -143,8 +143,6 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
                          LastName = request.LastName,
                          PhoneNumber = request.PhoneNumber,
                          Gender = request.Gender,
-                         Address = request.Address,
-                         UserType = UserType.Patient,
                      };
 
                      var result = await _userManager.CreateAsync(user, request.Password);
@@ -208,8 +206,6 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
                         LastName = request.LastName,
                         PhoneNumber = request.PhoneNumber,
                         Gender = request.Gender,
-                        Address = request.Address,
-                        UserType = UserType.Doctor,
                     };
 
                     var createResult = await _userManager.CreateAsync(user, request.Password);
@@ -227,8 +223,6 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
                         YearsOfExperience = request.YearsOfExperience,
                         Biography = request.Biography,
                         Education = request.Education,
-                        ConsultationFee = request.ConsultationFee,
-                        BranchId = request.BranchId,
                         IsVerified = false
                     };
 
@@ -259,7 +253,6 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Gender = Gender.Male,
-                UserType = UserType.Admin
             };
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
@@ -333,7 +326,7 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
             BackgroundJob.Enqueue<ISmsService>(sms => sms.SendAsync(phoneNumber, otpCode, CancellationToken.None));
             return Result.Success("OTP sent successfully Check Your Phone");
         }
-        public async Task<Result<string>> VerfiyForgetPasswordOtp(VerfiyForgetPasswordOtp request, CancellationToken cancellationToken)
+        public async Task<Result<string>> VerfiyForgetPasswordOtp(VerifyForgetPasswordOtp request, CancellationToken cancellationToken)
         {
             if (await _userManager.Users.Include(u => u.Otps).FirstOrDefaultAsync(u => u.PhoneNumber == request.PhoneNumber, cancellationToken) is not { } user)
                 return Result.Failure<string>(UserErrors.UserNotFound);

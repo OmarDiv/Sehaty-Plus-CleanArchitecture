@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-namespace Sehaty_Plus.Domain.Entities
+﻿namespace Sehaty_Plus.Domain.Entities
 {
     public class Otp
     {

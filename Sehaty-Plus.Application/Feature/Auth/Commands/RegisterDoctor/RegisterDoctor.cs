@@ -10,13 +10,12 @@ namespace Sehaty_Plus.Application.Feature.Auth.Commands.RegisterDoctor
         string LastName,
         string PhoneNumber,
         Gender Gender,
-        string? Address,
         string LicenseNumber,
         int YearsOfExperience,
         string Education,
         string? Biography,
         decimal ConsultationFee,
-        int BranchId) : IRequest<Result>;
+        int ClinicId) : IRequest<Result>;
     public class RegisterDoctorHandler(IAuthService _authService) : IRequestHandler<RegisterDoctor, Result>
     {
         public async Task<Result> Handle(RegisterDoctor request, CancellationToken cancellationToken)

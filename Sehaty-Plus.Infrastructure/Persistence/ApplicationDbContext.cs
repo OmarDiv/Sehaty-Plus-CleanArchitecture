@@ -7,12 +7,12 @@ using System.Reflection;
 using System.Security.Claims;
 namespace Sehaty_Plus.Infrastructure.Persistence;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor _httpContextAccessor) : IdentityDbContext<ApplicationUser>(options), IApplicationDbContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor _httpContextAccessor) : IdentityDbContext<ApplicationUser, ApplicationRole, string>(options), IApplicationDbContext
 {
     public DbSet<Specialization> Specializations { get; set; }
     public DbSet<Doctor> Doctors { get; set; }
     public DbSet<Patient> Patients { get; set; }
-    public DbSet<Branch> Branches { get; set; }
+    public DbSet<Clinic> Clinics { get; set; }
     public DbSet<Otp> Otps { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

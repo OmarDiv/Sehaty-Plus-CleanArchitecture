@@ -36,7 +36,7 @@ namespace Sehaty_Plus.Application.Feature.Auth.Commands.RegisterDoctor
             RuleFor(x => x.LicenseNumber)
                 .NotEmpty()
                 .MaximumLength(20);
-            RuleFor(x => x.BranchId)
+            RuleFor(x => x.ClinicId)
                 .NotEmpty()
                 .GreaterThan(0);
             RuleFor(x => x.YearsOfExperience)

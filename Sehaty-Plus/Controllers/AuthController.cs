@@ -54,7 +54,7 @@ namespace Sehaty_Plus.Controllers
             var result = await _mediator.Send(request, cancellationToken);
             return result.AsNoContentResult();
         }
-        [HttpPost("register/Admin")]
+        [HttpPost("register/admin")]
         public async Task<ActionResult<Result>> RegisterAdmin([FromBody] RegisterAdmin request, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(request, cancellationToken);
@@ -79,10 +79,10 @@ namespace Sehaty_Plus.Controllers
             var result = await _mediator.Send(forgotPassword);
             return result.AsActionResult();
         }
-        [HttpPost("Verfiy-forgetpassword-otp")]
-        public async Task<ActionResult<string>> VerfiyForgetPasswordOtp([FromBody] VerfiyForgetPasswordOtp verfiyForgetPasswordOtp)
+        [HttpPost("Verify-forgetpassword-otp")]
+        public async Task<ActionResult<string>> VerifyForgetPasswordOtp([FromBody] VerifyForgetPasswordOtp verifyForgetPasswordOtp)
         {
-            var result = await _mediator.Send(verfiyForgetPasswordOtp);
+            var result = await _mediator.Send(verifyForgetPasswordOtp);
             return result.AsActionResult();
         }
         [HttpPost("confirm-reset-password")]
@@ -91,6 +91,5 @@ namespace Sehaty_Plus.Controllers
             var result = await _mediator.Send(confirmResetPassword);
             return result.AsNoContentResult();
         }
-
     }
 }
