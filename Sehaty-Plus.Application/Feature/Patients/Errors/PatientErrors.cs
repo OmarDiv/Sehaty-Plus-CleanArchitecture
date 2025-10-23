@@ -1,4 +1,4 @@
-﻿namespace Sehaty_Plus.Application.Feature.Auth.Errors
+﻿namespace Sehaty_Plus.Application.Feature.Patients.Errors
 {
     public static class PateintErrors
     {

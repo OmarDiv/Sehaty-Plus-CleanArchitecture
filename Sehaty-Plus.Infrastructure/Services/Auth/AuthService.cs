@@ -19,6 +19,7 @@ using Sehaty_Plus.Application.Feature.Auth.Commands.VerfiyForgetPasswordOtp;
 using Sehaty_Plus.Application.Feature.Auth.Errors;
 using Sehaty_Plus.Application.Feature.Auth.Responses;
 using Sehaty_Plus.Application.Feature.Auth.Services;
+using Sehaty_Plus.Application.Feature.Patients.Errors;
 using Sehaty_Plus.Domain.Enums;
 using Sehaty_Plus.Infrastructure.Persistence;
 using System.Security.Cryptography;
@@ -252,7 +253,7 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
                 UserName = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                Gender = Gender.Male,
+                Gender = request.Gender,
             };
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)

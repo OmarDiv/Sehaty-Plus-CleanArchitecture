@@ -11,6 +11,7 @@ global using Sehaty_Plus.Application.Feature.Specializations.Errors;
 global using Sehaty_Plus.Application.Feature.Specializations.Responses;
 global using Sehaty_Plus.Application.Services.Queries;
 global using Sehaty_Plus.Domain.Entities;
+global using Sehaty_Plus.Application.Feature.Patients.Responses;
 
 
 
