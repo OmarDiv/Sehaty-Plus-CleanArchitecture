@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="en" style="margin:0;padding:0;">
+<head>
+    <meta charset="UTF-8">
+    <title>Verify Your New Email</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @media only screen and (max-width: 600px) {
+            .container {
+                width: 100% !important;
+                padding: 10px !important;
+            }
+
+            .content {
+                padding: 24px !important;
+            }
+        }
+    </style>
+</head>
+<body style="margin:0;padding:0;background:#f0f4f8;font-family:'Segoe UI',Arial,sans-serif;">
+    <table width="100%" bgcolor="#f0f4f8" cellpadding="0" cellspacing="0">
+        <tr>
+            <td align="center" style="padding:40px 0;">
+                <table class="container" width="600" bgcolor="#ffffff" cellpadding="0" cellspacing="0"
+                       style="border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+
+                    <!-- Header -->
+                    <tr>
+                        <td align="center" style="background:linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);padding:40px 32px;">
+                            <div style="background:#ffffff;width:72px;height:72px;border-radius:50%;display:inline-flex;margin-bottom:16px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                                <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+                                    <circle cx="36" cy="36" r="36" fill="#ffffff" />
+                                    <path d="M24 30l12 8 12-8M24 30v12c0 2 0 4 2 4h20c2 0 2-2 2-4V30" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                                </svg>
+                            </div>
+                            <h1 style="color:#ffffff;font-size:28px;margin:0;font-weight:700;">Verify New Email</h1>
+                        </td>
+                    </tr>
+
+                    <!-- Content -->
+                    <tr>
+                        <td class="content" style="padding:48px 40px;">
+                            <h2 style="color:#1f2937;font-size:24px;margin:0 0 16px 0;font-weight:700;">
+                                Hi {{FirstName}},
+                            </h2>
+                            <p style="color:#6b7280;font-size:16px;line-height:1.7;margin:0 0 24px 0;">
+                                You requested to change your email address on <strong style="color:#3b82f6;">Sehaty Plus</strong>.
+                                Please enter the code below to verify your new email address.
+                            </p>
+
+                            <!-- OTP Code Box -->
+                            <div style="text-align:center;margin:32px 0;">
+                                <div style="background:linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);padding:24px;border-radius:12px;border:2px dashed #3b82f6;">
+                                    <p style="color:#6b7280;font-size:14px;margin:0 0 8px 0;font-weight:600;text-transform:uppercase;letter-spacing:1px;">
+                                        Your Verification Code
+                                    </p>
+                                    <p style="color:#3b82f6;font-size:42px;font-weight:800;margin:0;letter-spacing:8px;font-family:'Courier New',monospace;">
+                                        {{OtpCode}}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <p style="color:#6b7280;font-size:15px;text-align:center;margin:24px 0;">
+                                This code will expire in <strong style="color:#ef4444;">5 minutes</strong>.
+                            </p>
+
+                            <div style="background:#fef3c7;padding:16px;border-radius:8px;border-left:4px solid #f59e0b;margin:24px 0;">
+                                <p style="color:#92400e;font-size:14px;margin:0;">
+                                    💡 <strong>Note:</strong> Enter this code on the email verification page to complete the change.
+                                </p>
+                            </div>
+
+                            <p style="color:#ef4444;font-size:14px;margin:32px 0 0 0;text-align:center;background:#fef2f2;padding:16px;border-radius:8px;border-left:4px solid #ef4444;">
+                                ⚠️ If you didn't request this change, please ignore this email and secure your account immediately.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td align="center" style="background:#f9fafb;padding:32px 40px;">
+                            <p style="color:#6b7280;font-size:13px;margin:0;">
+                                &copy; 2025 Sehaty Plus - Your Health, Our Priority<br>
+                                Cairo, Egypt
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

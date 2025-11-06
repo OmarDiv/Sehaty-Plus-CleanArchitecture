@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Sehaty_Plus.Application.Feature.Account.Commands.ChangeEmail;
 using Sehaty_Plus.Application.Feature.Account.Commands.ChangePassword;
 using Sehaty_Plus.Application.Feature.Account.Commands.UpdateProfile;
 using Sehaty_Plus.Application.Feature.Account.Queries.GetProfile;
@@ -24,12 +25,12 @@ namespace Sehaty_Plus.Controllers
             var result = await _mediator.Send(new UpdateProfile(User.GetUserId()!, request.FirstName, request.LastName, request.Gender));
             return result.AsNoContentResult();
         }
-        //[HttpPost("change-email")]
-        //public async Task<IActionResult> SendChangeEmailCode(ChangeEmailRequest request)
-        //{
-        //    var result = await _mediator.Send(request);
-        //    return result.AsActionResult();
-        //}
+        [HttpPost("change-email")]
+        public async Task<ActionResult<Result>> SendChangeEmailCode()
+        {
+            var result = await _mediator.Send(new ChangeEmail(User.GetUserId()!));
+            return result.AsNoContentResult();
+        }
         //[HttpPost("confirm-change-email")]
         //public async Task<IActionResult> ConfirmChangeEmail(ConfirmChangeEmailRequest request)
         //{
@@ -45,8 +46,8 @@ namespace Sehaty_Plus.Controllers
         [HttpPost("change-password")]
         public async Task<ActionResult<Result>> ChangePassword([FromBody] ChangePasswordDto request)
         {
-         var result = await _mediator.Send(new ChangePassword(User.GetUserId()!,
-          request.OldPassword, request.NewPassword, request.ConfirmPassword));
+            var result = await _mediator.Send(new ChangePassword(User.GetUserId()!,
+             request.OldPassword, request.NewPassword, request.ConfirmPassword));
             return result.AsNoContentResult();
         }
     }

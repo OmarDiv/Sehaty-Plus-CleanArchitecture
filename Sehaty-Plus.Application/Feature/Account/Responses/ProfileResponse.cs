@@ -11,7 +11,7 @@ namespace Sehaty_Plus.Application.Feature.Account.Responses
         string PhoneNumber,
         [property: JsonConverter(typeof(JsonStringEnumConverter))] Gender Gender,
         string? ProfilePicture,
-        DateTime RegisteredDate,
+        DateOnly RegisteredDate,
         bool IsActive
         );
 }

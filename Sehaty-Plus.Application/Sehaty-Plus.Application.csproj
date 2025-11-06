@@ -40,11 +40,14 @@
 		<Folder Include="Feature\Account\Errors\" />
 		<Folder Include="Feature\Account\Queries\GetAllUsers\" />
 		<Folder Include="Feature\Account\Commands\ChangePhoneNumber\" />
-		<Folder Include="Feature\Account\Commands\ChangeEmail\" />
 		<Folder Include="Feature\Account\Services\" />
 		<Folder Include="Feature\Auth\Queries\" />
-		<Folder Include="Feature\Doctors\" />
+		<Folder Include="Feature\Doctors\Commands\" />
+		<Folder Include="Feature\Doctors\Errors\" />
 		<Folder Include="Feature\Patients\Commands\" />
+		<Folder Include="Feature\User\Errors\" />
+		<Folder Include="Feature\User\Responses\" />
+		<Folder Include="Feature\User\Queries\" />
 	</ItemGroup>
 
 </Project>

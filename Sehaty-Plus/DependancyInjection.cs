@@ -1,5 +1,7 @@
-﻿using Hangfire;
+﻿using Dapper;
+using Hangfire;
 using Microsoft.AspNetCore.RateLimiting;
+using Sehaty_Plus.Application.Services.TypeHandlers;
 using Sehaty_Plus.Errors;
 using System.Threading.RateLimiting;
 namespace Sehaty_Plus
@@ -21,6 +23,7 @@ namespace Sehaty_Plus
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
             services.AddBackgroundJobsConfig(configuration);
+            SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
             services.AddRateLimiter(rateLimiterOptions =>
             {
                 rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;

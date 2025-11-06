@@ -14,7 +14,6 @@ namespace Sehaty_Plus.Application.Feature.Account.Queries.GetProfile
                        FROM AspNetUsers U WHERE U.Id = @UserId", new { request.UserId });
             if (response is null)
                 return Result.Failure<ProfileResponse>(UserErrors.InvalidCredentials);
-
             return Result.Success(response);
         }
     }

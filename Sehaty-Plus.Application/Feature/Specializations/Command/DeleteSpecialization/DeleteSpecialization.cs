@@ -2,16 +2,15 @@
 
 public record DeleteSpecialization(int Id) : IRequest<Result>;
 
-public class DeleteSpecializationHandler(IApplicationDbContext applicationDbContext) : IRequestHandler<DeleteSpecialization, Result>
+public class DeleteSpecializationHandler(IUnitOfWork _unitOfWork) : IRequestHandler<DeleteSpecialization, Result>
 {
-    private readonly IApplicationDbContext _dbContext = applicationDbContext;
 
     public async Task<Result> Handle(DeleteSpecialization request, CancellationToken cancellationToken)
     {
-        if (await _dbContext.Specializations.Where(x => x.Id == request.Id).FirstOrDefaultAsync(cancellationToken: cancellationToken) is not { } IsExsist)
+        if (await _unitOfWork.Specializations.GetByIdAsync(request.Id) is not { } IsExsist)
             return Result.Failure<bool>(SpecializationErrors.SpecializationNotFound);
-        _dbContext.Specializations.Remove(IsExsist);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _unitOfWork.Specializations.DeleteAsync(IsExsist);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success();
     }
 }

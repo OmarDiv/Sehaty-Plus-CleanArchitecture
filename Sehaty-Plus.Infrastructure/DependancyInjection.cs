@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,7 @@ using Sehaty_Plus.Application.Common.SmsService.YourApp.Application.Interfaces.S
 using Sehaty_Plus.Application.Feature.Auth.Services;
 using Sehaty_Plus.Application.Services.Queries;
 using Sehaty_Plus.Infrastructure.Persistence;
+using Sehaty_Plus.Infrastructure.Repositories;
 using Sehaty_Plus.Infrastructure.Services.Auth;
 using Sehaty_Plus.Infrastructure.Services.Email;
 using Sehaty_Plus.Infrastructure.Services.Sms;
@@ -30,14 +32,15 @@ namespace Sehaty_Plus.Infrastructure
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
 
             services.AddScoped<IApplicationDbContext>(provider =>
-                provider.GetRequiredService<ApplicationDbContext>());
+                           provider.GetRequiredService<ApplicationDbContext>());
 
             services.AddScoped<IQueryExecuter, QueryExecuter>();
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEmailSenderService, EmailSenderService>();
             services.AddTransient<IOtpService, OtpService>();
             services.AddTransient<ISmsService, TwilioSmsService>();
-
 
             return services;
         }
@@ -94,7 +97,5 @@ namespace Sehaty_Plus.Infrastructure
 
             return services;
         }
-
-
     }
 }

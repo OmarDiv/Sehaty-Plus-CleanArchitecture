@@ -21,11 +21,11 @@ namespace Sehaty_Plus.Infrastructure.Services.Email
             var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin ?? "https://sehaty-plus.com";
 
             var emailBody = EmailBodyBuilder.GenerateEmailBody("EmailConfirmation", new Dictionary<string, string>
-                 {
-                       { "{{FirstName}}", user.FirstName },
-                       { "{{ConfirmLink}}", $"{origin}/auth/confirm-email?userId={user.Id}&code={code}" },
-                       { "{{Code}}", code }
-                 });
+                     {
+                           { "{{FirstName}}", user.FirstName },
+                           { "{{ConfirmLink}}", $"{origin}/auth/confirm-email?userId={user.Id}&code={code}" },
+                           { "{{Code}}", code }
+                     });
 
             BackgroundJob.Enqueue(() => SendEmailAsync(
                 user.Email!,
@@ -35,17 +35,15 @@ namespace Sehaty_Plus.Infrastructure.Services.Email
 
             await Task.CompletedTask;
         }
-        public async Task SendChangeEmailConfirmationAsync(ApplicationUser user, string newEmail, string code)
+        public async Task SendChangeEmailOtpAsync(ApplicationUser user, string otpCode)
         {
-            var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
+            var emailBody = EmailBodyBuilder.GenerateEmailBody("EmailChangeOtp", new Dictionary<string, string>
+                {
+                            { "{{FirstName}}", user.FirstName },
+                            { "{{OtpCode}}", otpCode }
+                });
 
-            var emailBody = EmailBodyBuilder.GenerateEmailBody("ChangeEmailConfirmation", new Dictionary<string, string>
-                         {
-                             { "{{UserName}}", user.FirstName },
-                             { "{{ConfirmLink}}", $"{origin}/auth/confirm-change-email?userId={user.Id}&code={code}&newEmail={newEmail}" }
-                         });
-
-            BackgroundJob.Enqueue(() => SendEmailAsync(newEmail, "✅Sehaty-Plus:Confirm Your New Email", emailBody));
+            BackgroundJob.Enqueue(() => SendEmailAsync(user.Email!, "🔐 Sehaty Plus: Verify Your New Email", emailBody));
 
             await Task.CompletedTask;
         }
@@ -54,10 +52,10 @@ namespace Sehaty_Plus.Infrastructure.Services.Email
             var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
 
             var emailBody = EmailBodyBuilder.GenerateEmailBody("ResetPasswordConfirmation", new Dictionary<string, string>
-                            {
-                                { "{{UserName}}", user.FirstName },
-                                { "{{ResetLink}}", $"{origin}/auth/reset-password?userId={user.Id}&code={code}" }
-                            });
+                                {
+                                    { "{{UserName}}", user.FirstName },
+                                    { "{{ResetLink}}", $"{origin}/auth/reset-password?userId={user.Id}&code={code}" }
+                                });
 
             BackgroundJob.Enqueue(() => SendEmailAsync(user.Email!, "✅Sehaty-Plus:Reset Your Password", emailBody));
 
@@ -68,10 +66,10 @@ namespace Sehaty_Plus.Infrastructure.Services.Email
             var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
 
             var emailBody = EmailBodyBuilder.GenerateEmailBody("WelcomeAndSetPassword", new Dictionary<string, string>
-            {
-                { "{{UserName}}", user.FirstName },
-                { "{{SetPasswordLink}}", $"{origin}/auth/set-password?userId={user.Id}&code={code}" }
-            });
+                {
+                    { "{{UserName}}", user.FirstName },
+                    { "{{SetPasswordLink}}", $"{origin}/auth/set-password?userId={user.Id}&code={code}" }
+                });
 
             BackgroundJob.Enqueue(() => SendEmailAsync(user.Email!, "🔐Sehaty-Plus: Welcome! Set Your Password", emailBody));
 

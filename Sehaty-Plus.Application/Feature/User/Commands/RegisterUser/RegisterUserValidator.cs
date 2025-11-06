@@ -1,10 +1,10 @@
 ﻿using Sehaty_Plus.Application.Common.Const;
 
-namespace Sehaty_Plus.Application.Feature.Auth.Commands.RegisterAdmin
+namespace Sehaty_Plus.Application.Feature.User.Commands.RegisterUser
 {
-    public class RegisterAdminValidator : AbstractValidator<RegisterAdmin>
+    public class RegisterUserValidator : AbstractValidator<RegisterUser>
     {
-        public RegisterAdminValidator()
+        public RegisterUserValidator()
         {
             RuleFor(x => x.Email)
                 .EmailAddress()

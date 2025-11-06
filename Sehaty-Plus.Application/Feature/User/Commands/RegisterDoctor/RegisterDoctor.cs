@@ -1,6 +1,6 @@
 ﻿using Sehaty_Plus.Domain.Enums;
 
-namespace Sehaty_Plus.Application.Feature.Auth.Commands.RegisterDoctor
+namespace Sehaty_Plus.Application.Feature.User.Commands.RegisterDoctor
 {
     public record RegisterDoctor(
         string Email,

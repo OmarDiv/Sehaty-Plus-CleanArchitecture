@@ -35,7 +35,7 @@ namespace Sehaty_Plus.Controllers
             return result.AsActionResult();
         }
 
-        [HttpGet("admin")]
+        [HttpGet("/admin")]
         // [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<SpecializationDetailedResponse>>> GetAllDetailed()
         {
@@ -43,7 +43,7 @@ namespace Sehaty_Plus.Controllers
             return result.AsActionResult();
         }
 
-        [HttpGet("admin/{id}")]
+        [HttpGet("{id}/admin")]
         // [Authorize(Roles = "Admin")]
         public async Task<ActionResult<SpecializationDetailedResponse>> GetByIdDetailed([FromRoute] int id)
         {

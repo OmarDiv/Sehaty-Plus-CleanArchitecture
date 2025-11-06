@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Sehaty_Plus.Application.Common.Interfaces;
 using Sehaty_Plus.Domain.Common;
 using System.Reflection;
@@ -13,6 +14,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Doctor> Doctors { get; set; }
     public DbSet<Patient> Patients { get; set; }
     public DbSet<Clinic> Clinics { get; set; }
+    public DbSet<DoctorClinic> DoctorClinics { get; set; }
     public DbSet<Otp> Otps { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -42,4 +44,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         }
         return base.SaveChangesAsync(cancellationToken);
     }
+    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+          => Database.BeginTransactionAsync(cancellationToken);
 }

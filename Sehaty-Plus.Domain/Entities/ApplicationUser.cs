@@ -7,7 +7,7 @@ namespace Sehaty_Plus.Domain.Entities
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public Gender Gender { get; set; }
-        public DateTime RegisteredDate { get; set; } = DateTime.UtcNow;
+        public DateOnly RegisteredDate { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
         public bool IsActive { get; set; } = true;
         public string? ProfilePicture { get; set; }
         public Patient? Patient { get; set; }
