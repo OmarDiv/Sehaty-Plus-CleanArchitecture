@@ -15,7 +15,9 @@ namespace Sehaty_Plus.Application.Feature.User.Commands.RegisterDoctor
         string Education,
         string? Biography,
         decimal ConsultationFee,
-        int ClinicId) : IRequest<Result>;
+        int ClinicId,
+        int SpecializationId
+        ) : IRequest<Result>;
     public class RegisterDoctorHandler(IAuthService _authService) : IRequestHandler<RegisterDoctor, Result>
     {
         public async Task<Result> Handle(RegisterDoctor request, CancellationToken cancellationToken)
