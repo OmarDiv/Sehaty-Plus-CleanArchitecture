@@ -26,7 +26,7 @@ namespace Sehaty_Plus.Infrastructure.Repositories
         }
         public async Task<SpecializationResponse?> GetSpecializationByIdAsync(int id, CancellationToken ct = default)
         {
-            var sql = "SELECT Id, Name, Description FROM Specializations WHERE Id = @Id";
+            var sql = "SELECT Id, Name, Description FROM Specializations WHERE Id = @id";
             return await _queryExecuter.QueryFirstOrDefault<SpecializationResponse>(sql, new { Id = id });
         }
         public async Task<IEnumerable<SpecializationDetailedResponse>> GetAllDetailedAsync(CancellationToken ct = default)
