@@ -3,11 +3,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Sehaty_Plus.Infrastructure.Persistence.EntitesConfigurations
 {
-    public class ClinicConfigurations : IEntityTypeConfiguration<Clinic>
+    public class ClinicConfiguration : IEntityTypeConfiguration<Clinic>
     {
         public void Configure(EntityTypeBuilder<Clinic> builder)
         {
-            // Primary key
             builder.HasKey(b => b.Id);
             builder.Property(b => b.Name)
                 .IsRequired();

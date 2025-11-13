@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Sehaty_Plus.Infrastructure.Persistence.EntitesConfigurations
 {
-    public class SpecializationConfigurations : IEntityTypeConfiguration<Specialization>
+    public class SpecializationConfiguration : IEntityTypeConfiguration<Specialization>
     {
         public void Configure(EntityTypeBuilder<Specialization> builder)
         {

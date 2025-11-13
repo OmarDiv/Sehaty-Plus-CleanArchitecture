@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Twilio.Rest.Api.V2010.Account;
-using Twilio.Rest.Verify.V2.Service;
+﻿using Twilio.Rest.Api.V2010.Account;
 
 namespace Sehaty_Plus.Application.Common.SmsService
 {

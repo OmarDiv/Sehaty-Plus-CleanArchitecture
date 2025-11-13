@@ -8,8 +8,6 @@ namespace Sehaty_Plus.Infrastructure.Persistence.EntitesConfigurations
         {
             builder.HasKey(e => e.Id);
 
-            builder.Property(e => e.Id)
-                   .HasDefaultValueSql("NEWID()");
 
             builder.Property(e => e.LicenseNumber)
                    .IsRequired()

@@ -17,7 +17,7 @@ namespace Sehaty_Plus.Application.Common.Authentication
                 new( JwtRegisteredClaimNames.Email, user.Email!),
                 new( JwtRegisteredClaimNames.GivenName, user.FirstName),
                 new( JwtRegisteredClaimNames.FamilyName, user.LastName),
-                new( JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
+                new( JwtRegisteredClaimNames.Jti,Guid.CreateVersion7().ToString())
                 ];
 
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));

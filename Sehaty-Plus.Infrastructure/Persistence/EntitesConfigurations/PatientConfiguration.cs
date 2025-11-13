@@ -3,13 +3,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Sehaty_Plus.Infrastructure.Persistence.EntitesConfigurations
 {
-    public class PatientConfigurations : IEntityTypeConfiguration<Patient>
+    public class PatientConfiguration : IEntityTypeConfiguration<Patient>
     {
         public void Configure(EntityTypeBuilder<Patient> builder)
         {
             builder.HasKey(e => e.Id);
-            builder.Property(e => e.Id)
-            .HasDefaultValueSql("NEWID()");
 
             builder.Property(e => e.NationalId)
                 .IsRequired()

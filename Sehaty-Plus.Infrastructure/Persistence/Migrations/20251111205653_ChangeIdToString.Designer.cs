@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sehaty_Plus.Infrastructure.Persistence;
 
@@ -11,13 +12,15 @@ using Sehaty_Plus.Infrastructure.Persistence;
 namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251111205653_ChangeIdToString")]
+    partial class ChangeIdToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "9.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -45,295 +48,6 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ClaimType = "permissions",
-                            ClaimValue = "specializations:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ClaimType = "permissions",
-                            ClaimValue = "specializations:add",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ClaimType = "permissions",
-                            ClaimValue = "specializations:update",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ClaimType = "permissions",
-                            ClaimValue = "specializations:delete",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ClaimType = "permissions",
-                            ClaimValue = "specializations:toggle",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            ClaimType = "permissions",
-                            ClaimValue = "patients:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            ClaimType = "permissions",
-                            ClaimValue = "patients:details",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            ClaimType = "permissions",
-                            ClaimValue = "patients:add",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            ClaimType = "permissions",
-                            ClaimValue = "patients:update",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            ClaimType = "permissions",
-                            ClaimValue = "patients:delete",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            ClaimType = "permissions",
-                            ClaimValue = "doctors:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            ClaimType = "permissions",
-                            ClaimValue = "doctors:details",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            ClaimType = "permissions",
-                            ClaimValue = "doctors:add",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            ClaimType = "permissions",
-                            ClaimValue = "doctors:update",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            ClaimType = "permissions",
-                            ClaimValue = "doctors:delete",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            ClaimType = "permissions",
-                            ClaimValue = "doctors:verify",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            ClaimType = "permissions",
-                            ClaimValue = "clinics:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            ClaimType = "permissions",
-                            ClaimValue = "clinics:add",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            ClaimType = "permissions",
-                            ClaimValue = "clinics:update",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            ClaimType = "permissions",
-                            ClaimValue = "clinics:delete",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 21,
-                            ClaimType = "permissions",
-                            ClaimValue = "clinics:toggle",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 22,
-                            ClaimType = "permissions",
-                            ClaimValue = "appointments:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 23,
-                            ClaimType = "permissions",
-                            ClaimValue = "appointments:add",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 24,
-                            ClaimType = "permissions",
-                            ClaimValue = "appointments:update",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 25,
-                            ClaimType = "permissions",
-                            ClaimValue = "appointments:cancel",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 26,
-                            ClaimType = "permissions",
-                            ClaimValue = "appointments:confirm",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 27,
-                            ClaimType = "permissions",
-                            ClaimValue = "users:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 28,
-                            ClaimType = "permissions",
-                            ClaimValue = "users:add",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 29,
-                            ClaimType = "permissions",
-                            ClaimValue = "users:update",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 30,
-                            ClaimType = "permissions",
-                            ClaimValue = "users:delete",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 31,
-                            ClaimType = "permissions",
-                            ClaimValue = "users:toggle",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 32,
-                            ClaimType = "permissions",
-                            ClaimValue = "roles:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 33,
-                            ClaimType = "permissions",
-                            ClaimValue = "roles:add",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 34,
-                            ClaimType = "permissions",
-                            ClaimValue = "roles:update",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 35,
-                            ClaimType = "permissions",
-                            ClaimValue = "roles:delete",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 36,
-                            ClaimType = "permissions",
-                            ClaimValue = "roles:permissions",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 37,
-                            ClaimType = "permissions",
-                            ClaimValue = "reports:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 38,
-                            ClaimType = "permissions",
-                            ClaimValue = "reports:export",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 39,
-                            ClaimType = "permissions",
-                            ClaimValue = "analytics:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 40,
-                            ClaimType = "permissions",
-                            ClaimValue = "settings:manage",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        },
-                        new
-                        {
-                            Id = 41,
-                            ClaimType = "permissions",
-                            ClaimValue = "logs:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -396,13 +110,6 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "019a72b4-22b3-7297-aed0-a55034375f18",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -455,44 +162,6 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "019a72b4-22b5-752d-99a9-70ba20a93b20",
-                            ConcurrencyStamp = "019a72b4-22b5-752d-99a9-70bdfa2b942c",
-                            IsDefault = false,
-                            IsDeleted = false,
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "019a72b4-22b6-7d48-ae78-8572c7a26b07",
-                            ConcurrencyStamp = "019a72b4-22b6-7d48-ae78-8573b711cae0",
-                            IsDefault = true,
-                            IsDeleted = false,
-                            Name = "Member",
-                            NormalizedName = "MEMBER"
-                        },
-                        new
-                        {
-                            Id = "019a72b4-22b5-752d-99a9-70bc36061c72",
-                            ConcurrencyStamp = "019a72b4-22b5-752d-99a9-70bf3e8cc322",
-                            IsDefault = false,
-                            IsDeleted = false,
-                            Name = "Patient",
-                            NormalizedName = "PATIENT"
-                        },
-                        new
-                        {
-                            Id = "019a72b4-22b5-752d-99a9-70bbe5beed4c",
-                            ConcurrencyStamp = "019a72b4-22b5-752d-99a9-70beb6aceeca",
-                            IsDefault = false,
-                            IsDeleted = false,
-                            Name = "Doctor",
-                            NormalizedName = "DOCTOR"
-                        });
                 });
 
             modelBuilder.Entity("Sehaty_Plus.Domain.Entities.ApplicationUser", b =>
@@ -580,29 +249,6 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "019a72b4-22b3-7297-aed0-a55034375f18",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "019a72b4-22b5-752d-99a9-70b93dfe3258",
-                            Email = "admin@sehaty-plus.com",
-                            EmailConfirmed = true,
-                            FirstName = "Sehaty Plus",
-                            Gender = 1,
-                            IsActive = true,
-                            LastName = "Admin",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@SEHATY-PLUS.COM",
-                            NormalizedUserName = "ADMIN@SEHATY-PLUS.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAENbAD+udZ2X1bEmN/mP4cH0YEEpVaaVq6/5FXf8hys0WsIl1PFMic3ZuU+DfKsvdJQ==",
-                            PhoneNumberConfirmed = false,
-                            RegisteredDate = new DateOnly(2025, 11, 12),
-                            SecurityStamp = "019a72b4-22b5-752d-99a9-70b863ac6dae",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@sehaty-plus.com"
-                        });
                 });
 
             modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Clinic", b =>
@@ -656,7 +302,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clinics", (string)null);
+                    b.ToTable("Clinics");
                 });
 
             modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Doctor", b =>
@@ -700,7 +346,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Doctors", (string)null);
+                    b.ToTable("Doctors");
                 });
 
             modelBuilder.Entity("Sehaty_Plus.Domain.Entities.DoctorClinic", b =>
@@ -734,7 +380,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("DoctorClinics", (string)null);
+                    b.ToTable("DoctorClinics");
                 });
 
             modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Otp", b =>
@@ -763,7 +409,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Otps", (string)null);
+                    b.ToTable("Otps");
                 });
 
             modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Patient", b =>
@@ -813,7 +459,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Patients", (string)null);
+                    b.ToTable("Patients");
                 });
 
             modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Specialization", b =>
@@ -858,7 +504,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("Specializations", (string)null);
+                    b.ToTable("Specializations");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

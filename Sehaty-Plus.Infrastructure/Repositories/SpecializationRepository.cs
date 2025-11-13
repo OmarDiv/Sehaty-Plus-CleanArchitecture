@@ -2,11 +2,6 @@
 using Sehaty_Plus.Application.Common.Interfaces;
 using Sehaty_Plus.Application.Feature.Specializations.Responses;
 using Sehaty_Plus.Application.Services.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sehaty_Plus.Infrastructure.Repositories
 {

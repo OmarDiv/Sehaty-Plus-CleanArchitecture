@@ -1,9 +1,4 @@
 ﻿using Sehaty_Plus.Application.Feature.Doctors.Responses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sehaty_Plus.Application.Feature.Doctors.Queries.GetAllDoctor
 {
@@ -28,9 +23,9 @@ namespace Sehaty_Plus.Application.Feature.Doctors.Queries.GetAllDoctor
                                                 LEFT JOIN Specializations S ON D.SpecializationId = S.Id
                                                 ORDER BY D.YearsOfExperience DESC
                                                 ");
-            if(doctors is null || !doctors.Any())
+            if (doctors is null || !doctors.Any())
             {
-                return Result.Failure<IEnumerable<AdminDoctorListResponse>>(new Error("NoDoctorsFound", "No doctors were found in the system.",StatusCodes.Status404NotFound));
+                return Result.Failure<IEnumerable<AdminDoctorListResponse>>(new Error("NoDoctorsFound", "No doctors were found in the system.", StatusCodes.Status404NotFound));
             }
             return Result.Success(doctors);
         }

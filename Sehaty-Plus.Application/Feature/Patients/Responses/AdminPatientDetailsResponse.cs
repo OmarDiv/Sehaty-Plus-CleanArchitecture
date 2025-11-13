@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace Sehaty_Plus.Application.Feature.Patients.Responses
 {
     public record AdminPatientDetailsResponse(
-    Guid PatientId,
+    string PatientId,
     string FirstName,
     string LastName,
     string Email,

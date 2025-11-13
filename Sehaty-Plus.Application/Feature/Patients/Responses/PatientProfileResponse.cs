@@ -11,7 +11,7 @@ namespace Sehaty_Plus.Application.Feature.Patients.Responses
         string PhoneNumber,
         [property: JsonConverter(typeof(JsonStringEnumConverter))] Gender Gender,
         string? ProfilePicture,
-        Guid PatientId,
+        string PatientId,
         string NationalId,
         DateTime DateOfBirth,
         string Governorate,

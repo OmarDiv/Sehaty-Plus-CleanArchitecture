@@ -39,7 +39,7 @@ namespace Sehaty_Plus.Controllers
             var result = await _mediator.Send(request, cancellationToken);
             return result.AsNoContentResult();
         }
-        
+
         [HttpPost("confirm-email")]
         public async Task<ActionResult<Result>> ConfirmEmail([FromBody] ConfirmEmail request, CancellationToken cancellationToken)
         {
