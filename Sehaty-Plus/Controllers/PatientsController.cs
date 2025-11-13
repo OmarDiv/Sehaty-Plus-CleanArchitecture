@@ -23,8 +23,8 @@ namespace Sehaty_Plus.Controllers
             var result = await _mediator.Send(new GetAllPatients());
             return result.AsActionResult();
         }
-        [HttpGet("{patientId:guid}")]
-        public async Task<ActionResult<AdminPatientDetailsResponse>> GetById(Guid patientId)
+        [HttpGet("{patientId}")]
+        public async Task<ActionResult<AdminPatientDetailsResponse>> GetById(string patientId)
         {
             var result = await _mediator.Send(new GetPatientById(patientId));
             return result.AsActionResult();

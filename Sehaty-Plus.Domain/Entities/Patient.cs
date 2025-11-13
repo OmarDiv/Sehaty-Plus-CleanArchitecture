@@ -2,7 +2,7 @@
 {
     public class Patient
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; } = Guid.CreateVersion7().ToString();
         public string UserId { get; set; } = string.Empty;
         public string NationalId { get; set; } = string.Empty;
         public DateTime DateOfBirth { get; set; }

@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace Sehaty_Plus.Application.Feature.Doctors.Responses
 {
     public record AdminDoctorListResponse(
-        Guid DoctorId,
+        string DoctorId,
         string FirstName,
         string LastName,
         [property: JsonConverter(typeof(JsonStringEnumConverter))] Gender Gender,

@@ -1,7 +1,8 @@
 ﻿namespace Sehaty_Plus.Domain.Entities;
+
 public class Doctor
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; } = Guid.CreateVersion7().ToString();
     public string UserId { get; set; } = string.Empty;
     public string LicenseNumber { get; set; } = string.Empty;
     public int SpecializationId { get; set; }

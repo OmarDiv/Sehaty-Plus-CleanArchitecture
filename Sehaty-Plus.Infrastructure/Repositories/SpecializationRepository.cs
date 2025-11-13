@@ -2,11 +2,6 @@
 using Sehaty_Plus.Application.Common.Interfaces;
 using Sehaty_Plus.Application.Feature.Specializations.Responses;
 using Sehaty_Plus.Application.Services.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sehaty_Plus.Infrastructure.Repositories
 {
@@ -26,7 +21,7 @@ namespace Sehaty_Plus.Infrastructure.Repositories
         }
         public async Task<SpecializationResponse?> GetSpecializationByIdAsync(int id, CancellationToken ct = default)
         {
-            var sql = "SELECT Id, Name, Description FROM Specializations WHERE Id = @Id";
+            var sql = "SELECT Id, Name, Description FROM Specializations WHERE Id = @id";
             return await _queryExecuter.QueryFirstOrDefault<SpecializationResponse>(sql, new { Id = id });
         }
         public async Task<IEnumerable<SpecializationDetailedResponse>> GetAllDetailedAsync(CancellationToken ct = default)

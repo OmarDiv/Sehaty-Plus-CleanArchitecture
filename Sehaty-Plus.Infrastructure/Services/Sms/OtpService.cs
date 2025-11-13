@@ -1,9 +1,6 @@
-﻿using Mapster;
-using Microsoft.AspNetCore.Mvc;
-using Sehaty_Plus.Application.Common.SmsService.YourApp.Application.Interfaces.Services;
+﻿using Sehaty_Plus.Application.Common.SmsService.YourApp.Application.Interfaces.Services;
 using System.Security.Cryptography;
 using System.Text;
-using Twilio.Rest;
 
 namespace Sehaty_Plus.Infrastructure.Services.Sms
 {

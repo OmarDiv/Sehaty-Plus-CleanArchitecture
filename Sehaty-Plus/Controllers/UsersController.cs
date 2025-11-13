@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Sehaty_Plus.Application.Feature.User.Commands.RegisterDoctor;
+﻿using Sehaty_Plus.Application.Feature.User.Commands.RegisterDoctor;
 using Sehaty_Plus.Application.Feature.User.Commands.RegisterPatient;
 using Sehaty_Plus.Application.Feature.User.Commands.RegisterUser;
 

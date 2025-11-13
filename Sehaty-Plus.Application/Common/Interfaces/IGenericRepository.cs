@@ -6,5 +6,5 @@
         Task<T> AddAsync(T entity, CancellationToken ct = default);
         Task UpdateAsync(T entity, CancellationToken ct = default);
         Task DeleteAsync(T entity, CancellationToken ct = default);
-    } 
+    }
 }

@@ -1,14 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Sehaty_Plus.Application.Common.EmailService;
-using Sehaty_Plus.Application.Common.SmsService;
 using Sehaty_Plus.Application.Common.SmsService.YourApp.Application.Interfaces.Services;
-using Sehaty_Plus.Application.Feature.Auth.Errors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Twilio.Types;
 
 namespace Sehaty_Plus.Application.Feature.Account.Commands.ChangeEmail
 {

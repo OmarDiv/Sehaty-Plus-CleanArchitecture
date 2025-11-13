@@ -1,13 +1,8 @@
 ﻿using Sehaty_Plus.Application.Feature.Auth.Errors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sehaty_Plus.Application.Feature.Patients.Queries.GetPatientById
 {
-    public record GetPatientById(Guid PatientId) : IRequest<Result<AdminPatientDetailsResponse>>;
+    public record GetPatientById(string PatientId) : IRequest<Result<AdminPatientDetailsResponse>>;
     public class GetPatientByIdHandler(IQueryExecuter _queryExecuter) : IRequestHandler<GetPatientById, Result<AdminPatientDetailsResponse>>
     {
         public async Task<Result<AdminPatientDetailsResponse>> Handle(GetPatientById request, CancellationToken cancellationToken)
@@ -30,7 +25,7 @@ namespace Sehaty_Plus.Application.Feature.Patients.Queries.GetPatientById
                                                     FROM Patients P
                                                     INNER JOIN AspNetUsers U ON P.UserId = U.Id
                                                     WHERE P.Id = @PatientId", new { request.PatientId });
-            if(patient is null)
+            if (patient is null)
                 return Result.Failure<AdminPatientDetailsResponse>(UserErrors.InvalidCredentials);
             return Result.Success(patient);
 

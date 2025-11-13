@@ -20,6 +20,6 @@ namespace Sehaty_Plus.Application.Feature.Auth.Services
         Task<Result> ResendConfirmEmailAsync(ResendConfirmEmail request, CancellationToken cancellationToken);
         Task<Result<string>> SendForgetPasswordOtpAsync(string phoneNumber, CancellationToken cancellationToken);
         Task<Result<string>> VerfiyForgetPasswordOtp(VerifyForgetPasswordOtp request, CancellationToken cancellationToken);
-        Task<Result> ConfirmResetPasswordAsync(ConfirmResetPassword request , CancellationToken cancellationToken);
+        Task<Result> ConfirmResetPasswordAsync(ConfirmResetPassword request, CancellationToken cancellationToken);
     }
 }

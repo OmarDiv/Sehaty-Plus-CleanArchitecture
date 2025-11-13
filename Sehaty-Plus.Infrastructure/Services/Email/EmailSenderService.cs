@@ -1,8 +1,6 @@
 ﻿using Hangfire;
 using MailKit.Security;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using Sehaty_Plus.Application.Common.EmailService;

@@ -2,7 +2,7 @@
 using Sehaty_Plus.Application.Feature.Doctors.Responses;
 namespace Sehaty_Plus.Application.Feature.Doctors.Queries.GetDoctorById
 {
-    public record GetDoctorById(Guid DoctorId) : IRequest<Result<AdminDoctorDetailsResponse>>;
+    public record GetDoctorById(string DoctorId) : IRequest<Result<AdminDoctorDetailsResponse>>;
     public class GetDocrorByIdHandler(IQueryExecuter _queryExecuter) : IRequestHandler<GetDoctorById, Result<AdminDoctorDetailsResponse>>
     {
         public async Task<Result<AdminDoctorDetailsResponse>> Handle(GetDoctorById request, CancellationToken cancellationToken)

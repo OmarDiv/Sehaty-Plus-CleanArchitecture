@@ -8,7 +8,7 @@ namespace Sehaty_Plus.Infrastructure.Repositories
     {
         private readonly IApplicationDbContext _db = db;
         private readonly IQueryExecuter _query = query;
-        private IDbContextTransaction? _transaction;  
+        private IDbContextTransaction? _transaction;
 
         private ISpecializationRepository? _specializations;
 
@@ -16,7 +16,7 @@ namespace Sehaty_Plus.Infrastructure.Repositories
         {
             get
             {
-                return _specializations ??= new SpecializationRepository(_query, _db);  
+                return _specializations ??= new SpecializationRepository(_query, _db);
             }
         }
 
