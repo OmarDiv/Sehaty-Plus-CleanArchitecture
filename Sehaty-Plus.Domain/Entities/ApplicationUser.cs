@@ -13,7 +13,7 @@ namespace Sehaty_Plus.Domain.Entities
         public string LastName { get; set; } = string.Empty;
         public Gender Gender { get; set; }
         public DateOnly RegisteredDate { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
-        public bool IsActive { get; set; } = true;
+        public bool IsActive { get; set; } = true;  
         public string? ProfilePicture { get; set; }
         public Patient? Patient { get; set; }
         public Doctor? Doctor { get; set; }
