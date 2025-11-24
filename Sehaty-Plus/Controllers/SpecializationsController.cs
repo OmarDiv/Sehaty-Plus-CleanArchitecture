@@ -8,19 +8,18 @@ using Sehaty_Plus.Application.Feature.Specializations.Queries.GetAllSpecializati
 using Sehaty_Plus.Application.Feature.Specializations.Queries.GetSepcializtionById;
 using Sehaty_Plus.Application.Feature.Specializations.Queries.GetSpecializationByIdDetailed;
 using Sehaty_Plus.Application.Feature.Specializations.Responses;
+using Sehaty_Plus.Infrastructure.Persistence.Data;
 
 namespace Sehaty_Plus.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class SpecializationsController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
 
 
         [HttpGet]
-        //[Authorize(Roles = "User,Admin")]
         public async Task<ActionResult<IEnumerable<SpecializationResponse>>> GetAll()
         {
             var result = await _mediator.Send(new GetAllSpecializations());
@@ -28,23 +27,20 @@ namespace Sehaty_Plus.Controllers
         }
 
         [HttpGet("{id}")]
-        //[Authorize(Roles = "User,Admin")]
         public async Task<ActionResult<SpecializationResponse>> GetById([FromRoute] int id)
         {
             var result = await _mediator.Send(new GetSpecializationById(id));
             return result.AsActionResult();
         }
 
-        [HttpGet("/admin")]
-        // [Authorize(Roles = "Admin")]
+        [HttpGet("admin")]
         public async Task<ActionResult<IEnumerable<SpecializationDetailedResponse>>> GetAllDetailed()
         {
             var result = await _mediator.Send(new GetAllSpecializationsDetailed());
             return result.AsActionResult();
         }
 
-        [HttpGet("{id}/admin")]
-        // [Authorize(Roles = "Admin")]
+        [HttpGet("{id}/admin", Name = nameof(GetByIdDetailed))]
         public async Task<ActionResult<SpecializationDetailedResponse>> GetByIdDetailed([FromRoute] int id)
         {
             var result = await _mediator.Send(new GetSpecializationByIdDetailed(id));
@@ -52,7 +48,6 @@ namespace Sehaty_Plus.Controllers
         }
 
         [HttpPost]
-        //  [Authorize(Roles = "Admin")]
         public async Task<ActionResult<SpecializationDetailedResponse>> Create([FromBody] CreateSpecialization request)
         {
             var result = await _mediator.Send(request);
@@ -62,7 +57,6 @@ namespace Sehaty_Plus.Controllers
         }
 
         [HttpPut("{id}")]
-        // [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Update([FromRoute] int id, [FromBody] UpdateSpecializationDto request)
         {
             var result = await _mediator.Send(new UpdateSpecialization(id, request.Name, request.Description));
@@ -70,7 +64,6 @@ namespace Sehaty_Plus.Controllers
         }
 
         [HttpDelete("{id}")]
-        // [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
             var result = await _mediator.Send(new DeleteSpecialization(id));
@@ -78,7 +71,6 @@ namespace Sehaty_Plus.Controllers
         }
 
         [HttpPatch("{id}/toggle-active")]
-        // [Authorize(Roles = "Admin")]
         public async Task<ActionResult> ToggleActivation([FromRoute] int id)
         {
             var result = await _mediator.Send(new ToggleSpecializationActive(id));
