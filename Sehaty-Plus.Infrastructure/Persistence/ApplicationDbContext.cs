@@ -24,6 +24,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
               .Where(fk => fk.DeleteBehavior == DeleteBehavior.Cascade && !fk.IsOwnership);
         foreach (var fk in cascade)
             fk.DeleteBehavior = DeleteBehavior.Restrict;
+       
         base.OnModelCreating(modelBuilder);
     }
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

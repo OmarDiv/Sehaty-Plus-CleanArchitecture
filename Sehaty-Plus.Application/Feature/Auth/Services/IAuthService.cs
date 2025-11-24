@@ -15,7 +15,7 @@ namespace Sehaty_Plus.Application.Feature.Auth.Services
         Task<Result> RevokeRefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken);
         Task<Result> RegisterPatientAsync(RegisterPatient request, CancellationToken cancellationToken);
         Task<Result> RegisterDoctorAsync(RegisterDoctor request, CancellationToken cancellationToken);
-        Task<Result> RegisterAdminAsync(RegisterUser request, CancellationToken cancellationToken);
+        Task<Result> RegisterUserAsync(RegisterUser request, CancellationToken cancellationToken);
         Task<Result> ConfirmEmailAsync(ConfirmEmail request, CancellationToken cancellationToken);
         Task<Result> ResendConfirmEmailAsync(ResendConfirmEmail request, CancellationToken cancellationToken);
         Task<Result<string>> SendForgetPasswordOtpAsync(string phoneNumber, CancellationToken cancellationToken);

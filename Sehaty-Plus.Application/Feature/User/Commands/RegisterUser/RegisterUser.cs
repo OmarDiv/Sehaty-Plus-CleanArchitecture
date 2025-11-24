@@ -7,7 +7,7 @@ namespace Sehaty_Plus.Application.Feature.User.Commands.RegisterUser
     {
         public async Task<Result> Handle(RegisterUser request, CancellationToken cancellationToken)
         {
-            return await _authService.RegisterAdminAsync(request, cancellationToken);
+            return await _authService.RegisterUserAsync(request, cancellationToken);
         }
     }
 }
