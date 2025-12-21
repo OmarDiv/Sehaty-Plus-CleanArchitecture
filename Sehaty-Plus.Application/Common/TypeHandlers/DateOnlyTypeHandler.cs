@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using System.Data;
 
-namespace Sehaty_Plus.Application.Services.TypeHandlers
+namespace Sehaty_Plus.Application.Common.TypeHandlers
 {
     public class DateOnlyTypeHandler : SqlMapper.TypeHandler<DateOnly>
     {

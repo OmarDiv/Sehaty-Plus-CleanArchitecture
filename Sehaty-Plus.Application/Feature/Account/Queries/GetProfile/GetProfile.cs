@@ -1,4 +1,5 @@
-﻿using Sehaty_Plus.Application.Feature.Account.Responses;
+﻿using Sehaty_Plus.Application.Common.Interfaces.Services;
+using Sehaty_Plus.Application.Feature.Account.Responses;
 using Sehaty_Plus.Application.Feature.Auth.Errors;
 
 namespace Sehaty_Plus.Application.Feature.Account.Queries.GetProfile

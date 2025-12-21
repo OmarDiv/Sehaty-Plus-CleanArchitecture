@@ -1,4 +1,6 @@
-﻿namespace Sehaty_Plus.Application.Feature.Patients.Queries.GetAllPatients
+﻿using Sehaty_Plus.Application.Common.Interfaces.Services;
+
+namespace Sehaty_Plus.Application.Feature.Patients.Queries.GetAllPatients
 {
     public record GetAllPatients() : IRequest<Result<IEnumerable<AdminPatientListResponse>>>;
     public class GetAllPatientsHandler(IQueryExecuter _queryExecuter) : IRequestHandler<GetAllPatients, Result<IEnumerable<AdminPatientListResponse>>>

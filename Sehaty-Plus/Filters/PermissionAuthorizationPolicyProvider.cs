@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 
-namespace Sehaty_Plus.Application.Common.Authentication.Filters;
+namespace Sehaty_Plus.Filters;
 
 public class PermissionAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options) 
     : DefaultAuthorizationPolicyProvider(options)

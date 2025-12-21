@@ -1,4 +1,4 @@
-﻿namespace Sehaty_Plus.Application.Common.SmsService
+﻿namespace Sehaty_Plus.Application.Common.Settings
 {
     public class TwilioSettings
     {

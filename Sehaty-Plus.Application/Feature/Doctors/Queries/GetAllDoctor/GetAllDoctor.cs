@@ -1,4 +1,5 @@
-﻿using Sehaty_Plus.Application.Feature.Doctors.Responses;
+﻿using Sehaty_Plus.Application.Common.Interfaces.Services;
+using Sehaty_Plus.Application.Feature.Doctors.Responses;
 
 namespace Sehaty_Plus.Application.Feature.Doctors.Queries.GetAllDoctor
 {

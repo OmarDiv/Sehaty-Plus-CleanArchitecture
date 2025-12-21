@@ -1,6 +1,6 @@
 ﻿using Twilio.Rest.Api.V2010.Account;
 
-namespace Sehaty_Plus.Application.Common.SmsService
+namespace Sehaty_Plus.Application.Common.Interfaces.Services
 {
     public interface ISmsService
     {

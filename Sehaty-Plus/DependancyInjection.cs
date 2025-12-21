@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Hangfire;
-using Sehaty_Plus.Application.Services.TypeHandlers;
+using Microsoft.AspNetCore.Authorization;
+using Sehaty_Plus.Application.Common.TypeHandlers;
 using Sehaty_Plus.Errors;
 using System.Threading.RateLimiting;
 namespace Sehaty_Plus
@@ -22,6 +23,9 @@ namespace Sehaty_Plus
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
             services.AddBackgroundJobsConfig(configuration);
+            services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
+            services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
+
             SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
             services.AddRateLimiter(rateLimiterOptions =>
             {

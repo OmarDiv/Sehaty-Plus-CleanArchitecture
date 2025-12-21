@@ -1,4 +1,6 @@
-﻿namespace Sehaty_Plus.Application.Feature.Specializations.Command.DeleteSpecialization;
+﻿using Sehaty_Plus.Application.Common.Interfaces.Persistence;
+
+namespace Sehaty_Plus.Application.Feature.Specializations.Command.DeleteSpecialization;
 
 public record DeleteSpecialization(int Id) : IRequest<Result>;
 

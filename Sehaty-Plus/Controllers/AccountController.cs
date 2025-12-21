@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Sehaty_Plus.Application.Common.Types;
 using Sehaty_Plus.Application.Feature.Account.Commands.ChangeEmail;
 using Sehaty_Plus.Application.Feature.Account.Commands.ChangePassword;
 using Sehaty_Plus.Application.Feature.Account.Commands.UpdateProfile;

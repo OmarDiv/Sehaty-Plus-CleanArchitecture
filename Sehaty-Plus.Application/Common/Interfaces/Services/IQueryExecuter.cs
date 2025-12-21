@@ -1,6 +1,6 @@
 ﻿using static Dapper.SqlMapper;
 
-namespace Sehaty_Plus.Application.Services.Queries
+namespace Sehaty_Plus.Application.Common.Interfaces.Services
 {
     public interface IQueryExecuter
     {

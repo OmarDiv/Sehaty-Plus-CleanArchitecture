@@ -1,4 +1,5 @@
-﻿using Sehaty_Plus.Application.Feature.User.Commands.RegisterDoctor;
+﻿using Sehaty_Plus.Application.Common.Types;
+using Sehaty_Plus.Application.Feature.User.Commands.RegisterDoctor;
 using Sehaty_Plus.Application.Feature.User.Commands.RegisterPatient;
 using Sehaty_Plus.Application.Feature.User.Commands.RegisterUser;
 
@@ -9,6 +10,7 @@ namespace Sehaty_Plus.Controllers
     public class UsersController(IMediator _mediator) : ControllerBase
     {
         [HttpPost("register-patient")]
+
         public async Task<ActionResult<Result>> RegisterPatient([FromBody] RegisterPatient request, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(request, cancellationToken);
@@ -21,6 +23,7 @@ namespace Sehaty_Plus.Controllers
             return result.AsNoContentResult();
         }
         [HttpPost("register-user")]
+        [HasPermission(Permissions.AddUser)]
         public async Task<ActionResult<Result>> RegisterUser([FromBody] RegisterUser request, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(request, cancellationToken);

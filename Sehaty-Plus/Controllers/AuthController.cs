@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.RateLimiting;
+using Sehaty_Plus.Application.Common.Types;
 using Sehaty_Plus.Application.Feature.Auth.Commands.ConfirmEmail;
 using Sehaty_Plus.Application.Feature.Auth.Commands.ConfirmResetPassword;
 using Sehaty_Plus.Application.Feature.Auth.Commands.GetRefreshToken;

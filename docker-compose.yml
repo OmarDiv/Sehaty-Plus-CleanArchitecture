@@ -1,0 +1,30 @@
+services:
+  sehaty-plus:
+    image: ${DOCKER_REGISTRY-}sehatyplus
+    container_name: sehaty-plus.api
+    build:
+      context: .
+      dockerfile: Sehaty-Plus/Dockerfile
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    networks:
+      - sehaty-net
+    depends_on:
+      - sehaty-plus.database
+      
+
+  sehaty-plus.database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sehaty-plus.database
+    environment:
+      SA_PASSWORD: "P@ssword123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    networks:
+      - sehaty-net
+
+
+networks:
+  sehaty-net:

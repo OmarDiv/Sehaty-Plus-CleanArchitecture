@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Sehaty_Plus.Application.Common.Interfaces;
+using Sehaty_Plus.Application.Common.Interfaces.Persistence;
 using Sehaty_Plus.Domain.Common;
 using System.Reflection;
 using System.Security.Claims;

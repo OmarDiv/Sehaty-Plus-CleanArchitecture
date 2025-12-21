@@ -1,4 +1,6 @@
-﻿namespace Sehaty_Plus.Application.Feature.Specializations.Command.UpdateSpecialization
+﻿using Sehaty_Plus.Application.Common.Interfaces.Persistence;
+
+namespace Sehaty_Plus.Application.Feature.Specializations.Command.UpdateSpecialization
 {
     public record UpdateSpecialization(int Id, string Name, string? Description) : IRequest<Result>;
 

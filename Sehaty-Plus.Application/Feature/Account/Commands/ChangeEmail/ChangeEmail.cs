@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Sehaty_Plus.Application.Common.EmailService;
+using Sehaty_Plus.Application.Common.Interfaces.Services;
 using Sehaty_Plus.Application.Common.SmsService.YourApp.Application.Interfaces.Services;
 
 namespace Sehaty_Plus.Application.Feature.Account.Commands.ChangeEmail

@@ -3,7 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 
-namespace Sehaty_Plus.Application.Services.Queries
+namespace Sehaty_Plus.Application.Common.Interfaces.Services
 {
     public class QueryExecuter : IQueryExecuter
     {

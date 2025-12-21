@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Sehaty_Plus.Application.Common.SmsService;
+using Sehaty_Plus.Application.Common.Interfaces.Services;
+using Sehaty_Plus.Application.Common.Settings;
+using Sehaty_Plus.Application.Common.Types;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;

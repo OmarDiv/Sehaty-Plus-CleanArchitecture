@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Sehaty_Plus.Application.Common.Interfaces;
+using Sehaty_Plus.Application.Common.Interfaces.Persistence;
+using Sehaty_Plus.Application.Common.Interfaces.Repositories;
+using Sehaty_Plus.Application.Common.Interfaces.Services;
 using Sehaty_Plus.Application.Feature.Specializations.Responses;
-using Sehaty_Plus.Application.Services.Queries;
 
 namespace Sehaty_Plus.Infrastructure.Repositories
 {

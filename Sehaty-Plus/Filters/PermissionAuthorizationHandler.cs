@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Sehaty_Plus.Application.Common.Authentication;
 using System.Security;
 
-namespace Sehaty_Plus.Application.Common.Authentication.Filters;
+namespace Sehaty_Plus.Filters;
 
 public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionRequirement>
 {

@@ -1,4 +1,6 @@
-﻿namespace Sehaty_Plus.Application.Feature.Specializations.Command.ToggleSpecializationActive;
+﻿using Sehaty_Plus.Application.Common.Interfaces.Persistence;
+
+namespace Sehaty_Plus.Application.Feature.Specializations.Command.ToggleSpecializationActive;
 
 public record ToggleSpecializationActive(int Id) : IRequest<Result>;
 

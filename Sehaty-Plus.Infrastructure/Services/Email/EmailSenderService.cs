@@ -3,7 +3,8 @@ using MailKit.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using Sehaty_Plus.Application.Common.EmailService;
+using Sehaty_Plus.Application.Common.Interfaces.Services;
+using Sehaty_Plus.Application.Common.Settings;
 
 namespace Sehaty_Plus.Infrastructure.Services.Email
 {

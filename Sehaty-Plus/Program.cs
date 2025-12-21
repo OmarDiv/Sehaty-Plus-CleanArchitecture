@@ -26,15 +26,21 @@ app.UseHangfireDashboard("/Jobs",
     new DashboardOptions
     {
         Authorization = new[]
-    {
-        new HangfireCustomBasicAuthenticationFilter
         {
-            User = builder.Configuration.GetValue<string>("HangfireSettings:user"),
-            Pass = builder.Configuration.GetValue<string>("HangfireSettings:password")
+            new HangfireCustomBasicAuthenticationFilter
+            {
+                User = builder.Configuration.GetValue<string>("HangfireSettings:user"),
+                Pass = builder.Configuration.GetValue<string>("HangfireSettings:password")
+            }
         }
     }
-    }
 );
+// Apply pending migrations at application startup With Docker
+//using (var scope = app.Services.CreateScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+//    db.Database.Migrate();
+//}
 
 app.UseHttpsRedirection();
 app.UseExceptionHandler();

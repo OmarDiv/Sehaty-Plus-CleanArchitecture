@@ -1,4 +1,6 @@
-﻿namespace Sehaty_Plus.Extention
+﻿using Sehaty_Plus.Application.Common.Types;
+
+namespace Sehaty_Plus.Extention
 {
 
     public static class ResultExtensions

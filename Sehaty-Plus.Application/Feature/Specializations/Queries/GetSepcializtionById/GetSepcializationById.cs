@@ -1,4 +1,6 @@
-﻿namespace Sehaty_Plus.Application.Feature.Specializations.Queries.GetSepcializtionById;
+﻿using Sehaty_Plus.Application.Common.Interfaces.Persistence;
+
+namespace Sehaty_Plus.Application.Feature.Specializations.Queries.GetSepcializtionById;
 
 public record GetSpecializationById(int Id) : IRequest<Result<SpecializationResponse>>;
 public class GetSpecializtionByIdHandler(IUnitOfWork _unitOfWork) : IRequestHandler<GetSpecializationById, Result<SpecializationResponse>>

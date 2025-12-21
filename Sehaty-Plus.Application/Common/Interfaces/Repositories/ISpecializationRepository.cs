@@ -1,4 +1,4 @@
-﻿namespace Sehaty_Plus.Application.Common.Interfaces
+﻿namespace Sehaty_Plus.Application.Common.Interfaces.Repositories
 {
     public interface ISpecializationRepository : IGenericRepository<Specialization>
     {

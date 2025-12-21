@@ -1,4 +1,4 @@
-﻿namespace Sehaty_Plus.Application.Common.EmailService
+﻿namespace Sehaty_Plus.Application.Common.Interfaces.Services
 {
     public interface IEmailSenderService
     {

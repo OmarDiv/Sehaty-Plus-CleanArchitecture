@@ -1,4 +1,5 @@
-﻿using Sehaty_Plus.Application.Feature.Auth.Errors;
+﻿using Sehaty_Plus.Application.Common.Interfaces.Services;
+using Sehaty_Plus.Application.Feature.Auth.Errors;
 
 namespace Sehaty_Plus.Application.Feature.Patients.Queries.GetPatientById
 {

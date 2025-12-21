@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace Sehaty_Plus.Application.Common.Authentication.Filters;
+namespace Sehaty_Plus.Filters;
 
 public class PermissionRequirement(string permission) : IAuthorizationRequirement
 {

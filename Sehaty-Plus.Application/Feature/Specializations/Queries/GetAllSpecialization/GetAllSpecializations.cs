@@ -1,4 +1,6 @@
-﻿namespace Sehaty_Plus.Application.Feature.Specializations.Queries.GetAllSpecialization;
+﻿using Sehaty_Plus.Application.Common.Interfaces.Persistence;
+
+namespace Sehaty_Plus.Application.Feature.Specializations.Queries.GetAllSpecialization;
 
 public record GetAllSpecializations() : IRequest<Result<IEnumerable<SpecializationResponse>>>;
 

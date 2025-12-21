@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace Sehaty_Plus.Application.Common.Interfaces
+namespace Sehaty_Plus.Application.Common.Interfaces.Persistence
 {
     public interface IApplicationDbContext
     {

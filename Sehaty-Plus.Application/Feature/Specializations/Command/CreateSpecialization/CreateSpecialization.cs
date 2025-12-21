@@ -1,4 +1,6 @@
-﻿namespace Sehaty_Plus.Application.Feature.Specializations.Command.CreateSpecialization;
+﻿using Sehaty_Plus.Application.Common.Interfaces.Persistence;
+
+namespace Sehaty_Plus.Application.Feature.Specializations.Command.CreateSpecialization;
 
 public record CreateSpecialization(string Name, string Description) : IRequest<Result<SpecializationDetailedResponse>>;
 
