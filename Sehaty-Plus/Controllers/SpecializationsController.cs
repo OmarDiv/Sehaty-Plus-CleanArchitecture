@@ -4,6 +4,8 @@ using Sehaty_Plus.Application.Feature.Specializations.Command.ToggleSpecializati
 using Sehaty_Plus.Application.Feature.Specializations.Command.UpdateSpecialization;
 using Sehaty_Plus.Application.Feature.Specializations.Queries.GetAllSpecialization;
 using Sehaty_Plus.Application.Feature.Specializations.Queries.GetAllSpecializationsDetailed;
+using Sehaty_Plus.Application.Feature.Specializations.Queries.GetSpecializationById;
+using Sehaty_Plus.Application.Feature.Specializations.Queries.GetSpecializationByIdDetailed;
 using Sehaty_Plus.Application.Feature.Specializations.Responses;
 
 namespace Sehaty_Plus.Controllers
@@ -23,7 +25,7 @@ namespace Sehaty_Plus.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<SpecializationResponse>> GetById([FromRoute] int id)
         {
-            var result = await _mediator.Send(new Application.Feature.Specializations.Queries.GetSepcializtionById.GetSpecializationByIdDetailed(id));
+            var result = await _mediator.Send(new GetSpecializationById(id));
             return result.AsActionResult();
         }
         [HttpGet("admin")]
@@ -38,7 +40,7 @@ namespace Sehaty_Plus.Controllers
         [HasPermission(Permissions.AddSpecialization)]
         public async Task<ActionResult<SpecializationDetailedResponse>> GetByIdDetailed([FromRoute] int id)
         {
-            var result = await _mediator.Send(new Application.Feature.Specializations.Queries.GetSpecializationByIdDetailed.GetSpecializationByIdDetailed(id));
+            var result = await _mediator.Send(new GetSpecializationByIdDetailed(id));
             return result.AsActionResult();
         }
 

@@ -1,9 +1,11 @@
 using Hangfire;
 using HangfireBasicAuthenticationFilter;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Sehaty_Plus;
 using Sehaty_Plus.Application;
 using Sehaty_Plus.Infrastructure;
+using Sehaty_Plus.Infrastructure.Persistence;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,11 +40,11 @@ app.UseHangfireDashboard("/Jobs",
     }
 );
 //Apply pending migrations at application startup With Docker
-//using (var scope = app.Services.CreateScope())
-//{
-//    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-//    db.Database.Migrate();
-//}
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+}
 
 app.UseHttpsRedirection();
 app.UseExceptionHandler();

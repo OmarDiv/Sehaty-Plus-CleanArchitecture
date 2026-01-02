@@ -1,7 +1,7 @@
-﻿namespace Sehaty_Plus.Application.Feature.Specializations.Queries.GetSepcializtionById
+﻿namespace Sehaty_Plus.Application.Feature.Specializations.Queries.GetSpecializationById
 {
     public class GetSpecializationByIdValidator
-        : AbstractValidator<GetSpecializationByIdDetailed>
+        : AbstractValidator<GetSpecializationById>
     {
         public GetSpecializationByIdValidator()
         {
