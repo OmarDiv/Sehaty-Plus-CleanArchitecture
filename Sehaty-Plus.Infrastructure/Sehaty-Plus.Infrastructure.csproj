@@ -32,14 +32,16 @@
     <ProjectReference Include="..\Sehaty-Plus.Application\Sehaty-Plus.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Security\" />
-  </ItemGroup>
-
 	<ItemGroup>
 		<Content Include="Services\Email\Templates\**\*.*">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Security\**" />
+	  <EmbeddedResource Remove="Security\**" />
+	  <None Remove="Security\**" />
 	</ItemGroup>
 
 

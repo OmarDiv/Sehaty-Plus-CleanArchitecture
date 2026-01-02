@@ -7,19 +7,14 @@ public record GetAllSpecializations() : IRequest<Result<IEnumerable<Specializati
 
 public class GetAllSpecializationsHandler(IUnitOfWork _unitOfWork, ICacheService _cacheService) : IRequestHandler<GetAllSpecializations, Result<IEnumerable<SpecializationResponse>>>
 {
-    private const string CacheKey = "Specializations:All";
+    private const string _cacheKey = "Specializations:All";
     public async Task<Result<IEnumerable<SpecializationResponse>>> Handle(GetAllSpecializations request, CancellationToken cancellationToken)
     {
-        var result = await _cacheService.GetAsync(CacheKey,
-            factory: async () =>
-            {
-                var Response = await _unitOfWork.Specializations.GetAllActiveAsync(cancellationToken);
-                if (Response is null)
-                    return Result.Failure<IEnumerable<SpecializationResponse>>(SpecializationErrors.SpecializationNotFound);
-                return Result.Success(Response);
-            },
-            cancellationToken);
-
-        return result!;
+        var data = await _cacheService.GetAsync(
+                         _cacheKey,
+                         factory: async () => await _unitOfWork.Specializations.GetAllActiveAsync(cancellationToken),
+                         cancellationToken
+        );
+        return Result.Success(data ?? []);
     }
 }
