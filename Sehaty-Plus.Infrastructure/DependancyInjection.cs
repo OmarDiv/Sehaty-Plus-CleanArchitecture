@@ -15,7 +15,9 @@ using Sehaty_Plus.Application.Feature.Roles.Services;
 using Sehaty_Plus.Infrastructure.Persistence;
 using Sehaty_Plus.Infrastructure.Repositories;
 using Sehaty_Plus.Infrastructure.Services.Auth;
+using Sehaty_Plus.Infrastructure.Services.Caching;
 using Sehaty_Plus.Infrastructure.Services.Email;
+using Sehaty_Plus.Infrastructure.Services.QueryExecuter;
 using Sehaty_Plus.Infrastructure.Services.Role;
 using Sehaty_Plus.Infrastructure.Services.Sms;
 using System.Text;
@@ -31,6 +33,11 @@ namespace Sehaty_Plus.Infrastructure
                 .AuthConfig(configuration);
 
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration.GetConnectionString("Redis");
+                options.InstanceName = "SehatyPlus_";
+            });
 
             services.AddScoped<IApplicationDbContext>(provider =>
                            provider.GetRequiredService<ApplicationDbContext>());
@@ -41,6 +48,7 @@ namespace Sehaty_Plus.Infrastructure
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IEmailSenderService, EmailSenderService>();
+            services.AddSingleton<ICacheService, CacheService>();
             services.AddTransient<IOtpService, OtpService>();
             services.AddTransient<ISmsService, TwilioSmsService>();
 

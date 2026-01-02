@@ -1,9 +1,10 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Sehaty_Plus.Application.Common.Interfaces.Services;
 using System.Data;
 
-namespace Sehaty_Plus.Application.Common.Interfaces.Services
+namespace Sehaty_Plus.Infrastructure.Services.QueryExecuter
 {
     public class QueryExecuter : IQueryExecuter
     {
@@ -38,7 +39,7 @@ namespace Sehaty_Plus.Application.Common.Interfaces.Services
                 var result = await mapResultSets(reader);
                 return result;
             }, param!);
-
+            
             return result;
         }
         private async Task<T> ExecuteQuery<T>(Func<IDbConnection, Task<T>> executerFunc, object param)

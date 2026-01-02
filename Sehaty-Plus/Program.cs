@@ -1,5 +1,6 @@
 using Hangfire;
 using HangfireBasicAuthenticationFilter;
+using Scalar.AspNetCore;
 using Sehaty_Plus;
 using Sehaty_Plus.Application;
 using Sehaty_Plus.Infrastructure;
@@ -21,6 +22,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 app.UseHangfireDashboard("/Jobs",
     new DashboardOptions
@@ -35,7 +37,7 @@ app.UseHangfireDashboard("/Jobs",
         }
     }
 );
-// Apply pending migrations at application startup With Docker
+//Apply pending migrations at application startup With Docker
 //using (var scope = app.Services.CreateScope())
 //{
 //    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();

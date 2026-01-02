@@ -1,8 +1,7 @@
-﻿using Dapper;
-using Hangfire;
+﻿using Hangfire;
 using Microsoft.AspNetCore.Authorization;
-using Sehaty_Plus.Application.Common.TypeHandlers;
 using Sehaty_Plus.Errors;
+using Sehaty_Plus.Infrastructure.Persistence.Data;
 using System.Threading.RateLimiting;
 namespace Sehaty_Plus
 {
@@ -19,14 +18,21 @@ namespace Sehaty_Plus
                 .AllowAnyHeader()
                 .WithOrigins(configuration.GetSection("AllowedOrigins").Get<string[]>()!));
             });
-            services.AddOpenApi();
+            services.AddEndpointsApiExplorer().AddOpenApi();
+            services.AddAuthorization(
+                options =>
+                {
+                    options.AddPolicy("ApiAdminPolicy", policy =>
+                        policy.RequireRole(DefaultRoles.Admin.Name));
+                }
+            );
+
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
             services.AddBackgroundJobsConfig(configuration);
             services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
             services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
-            SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
             services.AddRateLimiter(rateLimiterOptions =>
             {
                 rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;

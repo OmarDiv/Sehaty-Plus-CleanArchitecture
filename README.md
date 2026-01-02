@@ -30,12 +30,17 @@
 Sehaty-Plus is built with all essential modules and best practices required for modern, enterprise-grade healthcare applications:
 
 - ✅ **User Management** - Registration, authentication, roles, and permissions
+- ✅ **Role-Based Access Control (RBAC)** - Permission-based authorization system
+- ✅ **Repository Pattern** - Generic repository and Unit of Work pattern
+- ✅ **Docker Support** - Containerized deployment with Docker Compose
+- ✅ **Redis Integration** - Caching and session management ready
 - ✅ **Structured Logging** (Serilog) - Centralized logs for monitoring
 - ✅ **Exception Handling** - Global exception handler with consistent error responses
 - ✅ **Problem Details** - RFC 7807-compliant error responses
 - ✅ **CORS Configuration** - Secure cross-origin resource sharing
 - ✅ **Audit Logging** - Track critical actions and changes
 - ✅ **Background Jobs** - Scheduled and asynchronous tasks via Hangfire
+- ✅ **Hangfire Dashboard** - Job monitoring with authentication
 - ✅ **Rate Limiting** - Protect APIs from abuse (5 req/min per IP)
 - ✅ **API Versioning** - Seamless API evolution
 - ✅ **Swagger/OpenAPI** - Auto-generated interactive API documentation
@@ -48,21 +53,21 @@ Sehaty-Plus is built with all essential modules and best practices required for 
 
 ### **Core Entities**
 
-| Entity | Description | Status |
-|--------|-------------|--------|
-| **ApplicationUser** | Base user model for patients, doctors, admins | ✅ Implemented |
-| **Patient** | Patient profile with medical history | ✅ Implemented |
-| **Doctor** | Doctor profile with specialization and experience | ✅ Implemented |
-| **Clinic** | Healthcare facility details and locations | ✅ Implemented |
-| **DoctorClinic** | Many-to-many relationship with consultation fees | ✅ Implemented |
-| **Specialization** | Medical specializations (Cardiologist, etc.) | ✅ Implemented |
-| **Otp** | One-time passwords for authentication | ✅ Implemented |
-| **RefreshToken** | Token rotation for secure sessions | ✅ Implemented |
-| **Appointment** | Appointment scheduling between patient and doctor | 🔄 Phase 2 |
-| **MedicalRecord** | Patient medical records and history | 🔄 Phase 2 |
-| **Review** | Patient reviews for doctors | 🔄 Phase 4 |
-| **Notification** | System notifications for users | 🔄 Phase 4 |
-| **Payment** | Payment records and transactions | 🔄 Phase 3 |
+| Entity              | Description                                       | Status         |
+| ------------------- | ------------------------------------------------- | -------------- |
+| **ApplicationUser** | Base user model for patients, doctors, admins     | ✅ Implemented |
+| **Patient**         | Patient profile with medical history              | ✅ Implemented |
+| **Doctor**          | Doctor profile with specialization and experience | ✅ Implemented |
+| **Clinic**          | Healthcare facility details and locations         | ✅ Implemented |
+| **DoctorClinic**    | Many-to-many relationship with consultation fees  | ✅ Implemented |
+| **Specialization**  | Medical specializations (Cardiologist, etc.)      | ✅ Implemented |
+| **Otp**             | One-time passwords for authentication             | ✅ Implemented |
+| **RefreshToken**    | Token rotation for secure sessions                | ✅ Implemented |
+| **Appointment**     | Appointment scheduling between patient and doctor | 🔄 Phase 2     |
+| **MedicalRecord**   | Patient medical records and history               | 🔄 Phase 2     |
+| **Review**          | Patient reviews for doctors                       | 🔄 Phase 4     |
+| **Notification**    | System notifications for users                    | 🔄 Phase 4     |
+| **Payment**         | Payment records and transactions                  | 🔄 Phase 3     |
 
 ### **Entity Relationship Diagram**
 
@@ -74,39 +79,39 @@ erDiagram
     ApplicationUser ||--o{ Payment : makes
     ApplicationUser ||--o{ Notification : receives
     ApplicationUser ||--o{ Otp : has
-    
+
     Doctor ||--o{ Appointment : provides
     Doctor ||--o{ Review : receives
     Doctor ||--o{ DoctorClinic : works_in
     Doctor }o--|| Specialization : specializes_in
     Doctor }o--|| ApplicationUser : user_account
-    
+
     Patient ||--o{ Appointment : attends
     Patient ||--o{ Review : writes
     Patient ||--o{ MedicalRecord : has
     Patient }o--|| ApplicationUser : user_account
-    
+
     Clinic ||--o{ DoctorClinic : has
     Clinic ||--o{ Appointment : hosts
-    
+
     DoctorClinic }o--|| Doctor : doctor
     DoctorClinic }o--|| Clinic : clinic
-    
+
     Specialization ||--o{ Doctor : has
-    
+
     Appointment ||--o{ Payment : paid_by
     Appointment ||--o{ Notification : triggers
     Appointment }o--|| Doctor : doctor
     Appointment }o--|| Patient : patient
     Appointment }o--|| Clinic : location
-    
+
     Payment ||--o{ Notification : confirms
-    
+
     MedicalRecord ||--o{ Notification : alerts_on
-    
+
     Review }o--|| Doctor : about_doctor
     Review }o--|| Patient : written_by
-    
+
     RefreshToken }o--|| ApplicationUser : belongs_to
     Otp }o--|| ApplicationUser : for_user
     Notification }o--|| ApplicationUser : recipient
@@ -114,26 +119,26 @@ erDiagram
 
 ### **Relationship Types Summary**
 
-| Relationship | Type | Example |
-|-------------|------|---------|
-| User → Doctor | 1:1 | One doctor per user account |
-| User → Patient | 1:1 | One patient per user account |
-| User → OTP | 1:Many | Multiple OTP codes per user |
-| User → Appointment | 1:Many | Multiple appointments per user |
-| User → Review | 1:Many | Multiple reviews from patient |
-| User → Notification | 1:Many | Multiple notifications received |
-| User → Payment | 1:Many | Multiple payments made |
-| Doctor → Specialization | Many:1 | Multiple doctors per specialization |
-| Doctor → Appointment | 1:Many | Multiple appointments per doctor |
-| Doctor → Review | 1:Many | Multiple reviews per doctor |
-| Doctor ↔ Clinic | Many:Many | Doctors work in multiple clinics |
-| Clinic ← DoctorClinic → Doctor | Junction | Link with consultation fees |
-| Patient → Appointment | 1:Many | Multiple appointments per patient |
-| Patient → MedicalRecord | 1:Many | Multiple medical records |
-| Appointment → Payment | 1:1 | One payment per appointment |
-| Appointment → Notification | 1:Many | Multiple notifications per appointment |
-| Appointment → Doctor | Many:1 | Multiple appointments with doctor |
-| Appointment → Clinic | Many:1 | Appointment at clinic location |
+| Relationship                   | Type      | Example                                |
+| ------------------------------ | --------- | -------------------------------------- |
+| User → Doctor                  | 1:1       | One doctor per user account            |
+| User → Patient                 | 1:1       | One patient per user account           |
+| User → OTP                     | 1:Many    | Multiple OTP codes per user            |
+| User → Appointment             | 1:Many    | Multiple appointments per user         |
+| User → Review                  | 1:Many    | Multiple reviews from patient          |
+| User → Notification            | 1:Many    | Multiple notifications received        |
+| User → Payment                 | 1:Many    | Multiple payments made                 |
+| Doctor → Specialization        | Many:1    | Multiple doctors per specialization    |
+| Doctor → Appointment           | 1:Many    | Multiple appointments per doctor       |
+| Doctor → Review                | 1:Many    | Multiple reviews per doctor            |
+| Doctor ↔ Clinic                | Many:Many | Doctors work in multiple clinics       |
+| Clinic ← DoctorClinic → Doctor | Junction  | Link with consultation fees            |
+| Patient → Appointment          | 1:Many    | Multiple appointments per patient      |
+| Patient → MedicalRecord        | 1:Many    | Multiple medical records               |
+| Appointment → Payment          | 1:1       | One payment per appointment            |
+| Appointment → Notification     | 1:Many    | Multiple notifications per appointment |
+| Appointment → Doctor           | Many:1    | Multiple appointments with doctor      |
+| Appointment → Clinic           | Many:1    | Appointment at clinic location         |
 
 ---
 
@@ -146,13 +151,22 @@ Sehaty-Plus-CleanArchitecture/
 │   ├── Controllers/
 │   │   ├── AuthController.cs          # Authentication & Registration
 │   │   ├── AccountController.cs       # Profile & Password Management
-│   │   ├── PatientsController.cs      # Patient Operations
-│   │   └── SpecializationsController.cs # Medical Specializations
+│   │   ├── PatientsController.cs       # Patient Operations
+│   │   ├── DoctorsController.cs       # Doctor Management
+│   │   ├── ClincsController.cs        # Clinic Management
+│   │   ├── SpecializationsController.cs # Medical Specializations
+│   │   ├── RolesController.cs         # Role Management
+│   │   └── UsersController.cs         # User Registration
+│   ├── Filters/
+│   │   ├── HasPermissionAttribute.cs  # Permission-based Authorization
+│   │   ├── PermissionAuthorizationHandler.cs
+│   │   └── PermissionAuthorizationPolicyProvider.cs
 │   ├── Errors/
-│   │   └── GlobalExceptionHandler.cs  # Centralized Exception Handling
+│   │   └── GlobalExceptionHandler.cs   # Centralized Exception Handling
 │   ├── Extensions/
 │   │   ├── ResultExtensions.cs        # Result to HTTP Mapping
 │   │   └── UserExtensions.cs          # Claims Helper Methods
+│   ├── Dockerfile                     # Docker containerization
 │   └── Program.cs                     # Dependency Injection & Middleware
 │
 ├── 📂 Sehaty-Plus.Application/         # 💼 Business Logic Layer (CQRS)
@@ -174,16 +188,53 @@ Sehaty-Plus-CleanArchitecture/
 │   │   ├── Account/
 │   │   │   ├── Commands/
 │   │   │   │   ├── ChangePassword
+│   │   │   │   ├── ChangeEmail
 │   │   │   │   └── UpdateProfile
-│   │   │   └── Queries/
-│   │   │       └── GetProfile
+│   │   │   ├── Queries/
+│   │   │   │   └── GetProfile
+│   │   │   └── Responses/
+│   │   │       └── ProfileResponse.cs
 │   │   ├── Patients/
 │   │   │   ├── Queries/
 │   │   │   │   ├── GetAllPatients
 │   │   │   │   ├── GetPatientById
 │   │   │   │   └── GetPatientProfile
+│   │   │   ├── Responses/
+│   │   │   │   ├── PatientProfileResponse.cs
+│   │   │   │   ├── AdminPatientListResponse.cs
+│   │   │   │   └── AdminPatientDetailsResponse.cs
 │   │   │   └── Errors/
 │   │   │       └── PatientErrors.cs
+│   │   ├── Doctors/
+│   │   │   ├── Queries/
+│   │   │   │   ├── GetAllDoctor
+│   │   │   │   └── GetDoctorById
+│   │   │   └── Responses/
+│   │   │       ├── AdminDoctorListResponse.cs
+│   │   │       └── AdminDoctorDetailsResponse.cs
+│   │   ├── Clinc/
+│   │   │   └── Commands/
+│   │   │       └── AddClinc
+│   │   ├── Roles/
+│   │   │   ├── Commands/
+│   │   │   │   ├── AddRole
+│   │   │   │   ├── UpdateRole
+│   │   │   │   └── ToggleRoleStatus
+│   │   │   ├── Queries/
+│   │   │   │   ├── GetAllRoles
+│   │   │   │   └── GetRoleById
+│   │   │   ├── Responses/
+│   │   │   │   ├── RoleResponse.cs
+│   │   │   │   └── RoleDetailResponse.cs
+│   │   │   ├── Services/
+│   │   │   │   └── IRoleService.cs
+│   │   │   └── Errors/
+│   │   │       └── RoleErrors.cs
+│   │   ├── Users/
+│   │   │   └── Commands/
+│   │   │       ├── RegisterPatient
+│   │   │       ├── RegisterDoctor
+│   │   │       └── RegisterUser
 │   │   └── Specializations/
 │   │       ├── Commands/
 │   │       │   ├── CreateSpecialization
@@ -198,7 +249,8 @@ Sehaty-Plus-CleanArchitecture/
 │   │   ├── Authentication/
 │   │   │   ├── IJwtProvider.cs
 │   │   │   ├── JwtProvider.cs
-│   │   │   └── JwtOptions.cs
+│   │   │   ├── JwtOptions.cs
+│   │   │   └── Permissions.cs         # Permission constants
 │   │   ├── EmailService/
 │   │   │   ├── IEmailSenderService.cs
 │   │   │   └── MailSettings.cs
@@ -233,6 +285,13 @@ Sehaty-Plus-CleanArchitecture/
 │   │   │   ├── DoctorClinicConfigurations.cs
 │   │   │   └── OtpConfigurations.cs
 │   │   └── Migrations/ (EF Core Database Migrations)
+│   ├── Repositories/
+│   │   ├── GenericRepository.cs        # Generic repository pattern
+│   │   ├── UnitOfWork.cs               # Unit of Work pattern
+│   │   ├── DoctorRepository.cs
+│   │   ├── ClincRepository.cs
+│   │   ├── DoctorClinicRepository.cs
+│   │   └── SpecializationRepository.cs
 │   ├── Services/
 │   │   ├── Auth/
 │   │   │   └── AuthService.cs         # Authentication Business Logic
@@ -272,25 +331,36 @@ Sehaty-Plus-CleanArchitecture/
 ## ✨ Core Features - Implemented ✅
 
 ### 🔐 Authentication & Authorization
+
 - ✅ Email-based Registration (Patient, Doctor, Admin)
 - ✅ JWT Token Generation (60-minute expiry)
 - ✅ Refresh Token Rotation (14-day expiry)
 - ✅ Email Verification with confirmation codes
 - ✅ Password Recovery via SMS OTP (Twilio)
 - ✅ Rate Limiting (5 requests/minute per IP)
+- ✅ **Permission-Based Authorization** - Custom permission system with `HasPermission` attribute
+- ✅ **Role Management** - Complete CRUD operations for roles
+- ✅ **Role Status Toggle** - Enable/disable roles dynamically
+- ✅ **Permission Claims** - Permissions embedded in JWT tokens
 - ✅ Role-Based Access Control (RBAC)
 - ✅ Global Exception Handling with consistent error responses
 
 ### 👥 User Management
+
 - ✅ Patient Registration with National ID validation (14 digits)
 - ✅ Doctor Registration with license verification
+- ✅ Admin User Registration (with permissions)
 - ✅ Profile Management (Update Name, Gender)
+- ✅ **Change Email** - Email change with OTP verification
 - ✅ Password Change with old password verification
 - ✅ Email Confirmation workflow
 - ✅ OTP Generation & Verification (6-digit codes, 5-min expiry)
 - ✅ Account activation and deactivation
 
 ### 👨‍⚕️ Doctor Management
+
+- ✅ **Get All Doctors** - List all doctors with details
+- ✅ **Get Doctor by ID** - Detailed doctor information
 - ✅ Multi-Clinic Assignment (Many-to-Many relationship)
 - ✅ Specialization Tracking
 - ✅ Years of Experience recording
@@ -300,6 +370,7 @@ Sehaty-Plus-CleanArchitecture/
 - ✅ Different consultation fees per clinic
 
 ### 🏥 Patient Management
+
 - ✅ National ID validation (14 digits, unique)
 - ✅ Blood Type recording (A+, B-, AB+, O-)
 - ✅ Medical History tracking
@@ -309,20 +380,28 @@ Sehaty-Plus-CleanArchitecture/
 - ✅ Date of birth validation
 
 ### 🏢 Clinic Management
+
+- ✅ **Add Clinic** - Create new clinic with full details
 - ✅ Multi-location Support (Latitude/Longitude)
 - ✅ Clinic Details (Address, Phone, Images)
 - ✅ Amenities tracking (WiFi, Parking, etc.)
 - ✅ Active/Inactive status toggle
 - ✅ Clinic accessibility features
+- ✅ Permission-based access control for clinic operations
 
 ### 📋 Specializations Management
+
 - ✅ CRUD Operations (Create, Read, Update, Delete)
+- ✅ **Get All Specializations (Detailed)** - Admin view with audit info
+- ✅ **Get Specialization by ID (Detailed)** - Detailed admin view
 - ✅ Activation Toggle for specializations
 - ✅ Audit Trail (CreatedBy, UpdatedBy timestamps)
 - ✅ Duplicate Prevention via unique name index
 - ✅ Description and categorization
+- ✅ Permission-based access control
 
 ### 📧 Email & SMS Services
+
 - ✅ HTML Email Templates (Professional design)
 - ✅ Confirmation Emails with clickable links
 - ✅ Password Recovery emails
@@ -332,6 +411,7 @@ Sehaty-Plus-CleanArchitecture/
 - ✅ Email retry logic
 
 ### 🔒 Security Features
+
 - ✅ Password Hashing (PBKDF2 via Identity Framework)
 - ✅ JWT Token Validation and Claims extraction
 - ✅ Rate Limiting on authentication endpoints
@@ -342,17 +422,31 @@ Sehaty-Plus-CleanArchitecture/
 - ✅ Refresh token revocation
 
 ### 📊 Admin Features
+
+- ✅ **Role Management** - Create, update, delete, and toggle roles
+- ✅ **Permission Management** - Assign permissions to roles
+- ✅ **User Registration** - Admin can register new users
 - ✅ User management and monitoring
 - ✅ Specialization creation and management
 - ✅ Platform analytics and audit trails
 - ✅ Patient and doctor listings
 - ✅ System health monitoring
+- ✅ **Hangfire Dashboard** - Monitor background jobs with authentication
+
+### 🏗️ Architecture & Patterns
+
+- ✅ **Repository Pattern** - Generic repository with Unit of Work
+- ✅ **CQRS Pattern** - Command Query Responsibility Segregation
+- ✅ **MediatR** - Mediator pattern for request handling
+- ✅ **Dependency Injection** - Comprehensive DI setup
+- ✅ **Clean Architecture** - Separation of concerns across layers
 
 ---
 
 ## 🚧 Upcoming Features - Roadmap
 
 ### Phase 2 - Appointment System (Q1 2025)
+
 ```
 - Appointment Booking (Patient → Doctor)
 - Appointment Cancellation & Rescheduling
@@ -363,6 +457,7 @@ Sehaty-Plus-CleanArchitecture/
 ```
 
 ### Phase 3 - Payment Integration (Q2 2025)
+
 ```
 - Fawry Payment Gateway Integration
 - Consultation Fee Processing
@@ -373,6 +468,7 @@ Sehaty-Plus-CleanArchitecture/
 ```
 
 ### Phase 4 - Advanced Features (Q3 2025)
+
 ```
 - Medical Records Upload (PDF, Images)
 - Prescription Management
@@ -384,6 +480,7 @@ Sehaty-Plus-CleanArchitecture/
 ```
 
 ### Phase 5 - Telemedicine (Q4 2025)
+
 ```
 - Digital Prescriptions
 - Video Consultation (Twilio Video)
@@ -397,6 +494,7 @@ Sehaty-Plus-CleanArchitecture/
 ## 🔄 API Endpoints
 
 ### Authentication Endpoints
+
 ```
 POST   /Auth                              # Login
 POST   /Auth/register/patient             # Register Patient
@@ -412,28 +510,64 @@ POST   /Auth/confirm-reset-password       # Reset Password
 ```
 
 ### Account Management Endpoints
+
 ```
 GET    /me                                # Get Current User Profile
 PUT    /me                                # Update Profile (Name, Gender)
 POST   /me/change-password                # Change Password
+POST   /me/change-email                   # Send Change Email OTP
 ```
 
 ### Patient Operations Endpoints
+
 ```
 GET    /api/patients/info                 # Get Full Patient Profile
 GET    /api/patients                      # Get All Patients (Admin)
 GET    /api/patients/{patientId}          # Get Patient Details (Admin)
 ```
 
+### Doctor Operations Endpoints
+
+```
+GET    /api/doctors                       # Get All Doctors
+GET    /api/doctors/{doctorId}            # Get Doctor by ID
+```
+
+### Clinic Operations Endpoints
+
+```
+POST   /api/clincs                       # Add Clinic (Requires Permission)
+```
+
+### Role Management Endpoints
+
+```
+GET    /api/roles                         # Get All Roles (Requires Permission)
+GET    /api/roles/{id}                    # Get Role by ID (Requires Permission)
+POST   /api/roles                         # Create Role (Requires Permission)
+PUT    /api/roles/{id}                    # Update Role (Requires Permission)
+PUT    /api/roles/{id}/toggle-status      # Toggle Role Status (Requires Permission)
+```
+
+### User Registration Endpoints
+
+```
+POST   /api/users/register-patient        # Register Patient
+POST   /api/users/register-doctor         # Register Doctor
+POST   /api/users/register-user          # Register User (Admin, Requires Permission)
+```
+
 ### Specializations Endpoints
+
 ```
 GET    /api/specializations               # Get All Active Specializations
 GET    /api/specializations/{id}          # Get Specialization by ID
-GET    /api/specializations/admin         # Get All (with audit info)
-POST   /api/specializations               # Create Specialization (Admin)
-PUT    /api/specializations/{id}          # Update Specialization (Admin)
-DELETE /api/specializations/{id}          # Delete Specialization (Admin)
-PATCH  /api/specializations/{id}/toggle-active  # Toggle Active Status
+GET    /api/specializations/admin         # Get All Detailed (Requires Permission)
+GET    /api/specializations/{id}/admin    # Get Detailed by ID (Requires Permission)
+POST   /api/specializations               # Create Specialization (Requires Permission)
+PUT    /api/specializations/{id}          # Update Specialization (Requires Permission)
+DELETE /api/specializations/{id}          # Delete Specialization (Requires Permission)
+PATCH  /api/specializations/{id}/toggle-active  # Toggle Active Status (Requires Permission)
 ```
 
 ---
@@ -441,35 +575,42 @@ PATCH  /api/specializations/{id}/toggle-active  # Toggle Active Status
 ## 📊 Performance Metrics
 
 - **Response Time**: < 200ms (average)
-- **Database Queries**: Optimized with strategic indexes
-- **Caching**: Redis-ready for Phase 2
+- **Database Queries**: Optimized with strategic indexes and Repository Pattern
+- **Caching**: Redis integration ready (configured in Docker Compose)
 - **Concurrent Users**: 10,000+ (with load balancing)
 - **Uptime**: 99.9% SLA target
+- **Containerization**: Docker support with multi-stage builds
+- **Background Jobs**: Hangfire dashboard at `/Jobs` endpoint
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- .NET 9.0 SDK
-- SQL Server 2019+
+
+- .NET 9.0 SDK (or .NET 10.0 for Docker builds)
+- SQL Server 2019+ (or use Docker container)
+- Docker & Docker Compose (optional, for containerized deployment)
 - Visual Studio 2022 or VS Code
 - Git
 
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/omaar88/Sehaty-Plus.git
    cd Sehaty-Plus
    ```
 
 2. **Restore dependencies**
+
    ```bash
    dotnet restore
    ```
 
 3. **Configure settings**
+
    - Update `appsettings.Development.json` with:
      - Database connection string
      - JWT secret key (min 32 characters)
@@ -477,11 +618,13 @@ PATCH  /api/specializations/{id}/toggle-active  # Toggle Active Status
      - SMS credentials (Twilio)
 
 4. **Run migrations**
+
    ```bash
    dotnet ef database update --project Sehaty-Plus.Infrastructure
    ```
 
 5. **Start the application**
+
    ```bash
    dotnet run --project Sehaty-Plus
    ```
@@ -489,6 +632,40 @@ PATCH  /api/specializations/{id}/toggle-active  # Toggle Active Status
 6. **Access the API**
    - API: https://localhost:7240
    - Swagger UI: https://localhost:7240/swagger
+   - Hangfire Dashboard: https://localhost:7240/Jobs (requires authentication)
+
+### Docker Deployment
+
+1. **Using Docker Compose** (Recommended)
+
+   ```bash
+   docker-compose up -d
+   ```
+
+   This will start:
+
+   - Sehaty-Plus API (ports 5000, 5001)
+   - SQL Server 2022 (port 1433)
+   - Redis (port 6379)
+   - Redis Insight (port 8011)
+
+2. **Build Docker Image**
+
+   ```bash
+   docker build -t sehaty-plus -f Sehaty-Plus/Dockerfile .
+   ```
+
+3. **Run Container**
+
+   ```bash
+   docker run -p 5000:5000 -p 5001:5001 sehaty-plus
+   ```
+
+4. **Access Services**
+   - API: http://localhost:5000
+   - Swagger: http://localhost:5000/swagger
+   - Hangfire: http://localhost:5000/Jobs
+   - Redis Insight: http://localhost:8011
 
 ### Environment Configuration
 
@@ -515,10 +692,14 @@ PATCH  /api/specializations/{id}/toggle-active  # Toggle Active Status
     "AuthToken": "your-auth-token",
     "TwilioPhoneNumber": "+1234567890"
   },
-  "AllowedOrigins": [
-    "https://localhost:5173",
-    "http://localhost:5173"
-  ]
+  "AllowedOrigins": ["https://localhost:5173", "http://localhost:5173"],
+  "HangfireSettings": {
+    "user": "admin",
+    "password": "your-hangfire-password"
+  },
+  "ConnectionStrings": {
+    "Redis": "localhost:6379"
+  }
 }
 ```
 
@@ -550,6 +731,7 @@ We welcome contributions! Please follow these steps:
 5. Open a Pull Request
 
 ### Contribution Guidelines
+
 - Follow Clean Architecture principles
 - Write unit tests for new features
 - Update documentation
@@ -566,6 +748,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👨‍💻 Developer
 
 **Omar Mohamed** - Full Stack .NET Developer
+
 - Email: [omaar88Mohamed@gmail.com](mailto:omaar88Mohamed@gmail.com)
 - GitHub: [@OmarDiv](https://github.com/OmarDiv)
 - LinkedIn: [Omar Mohamed](https://www.linkedin.com/in/omar-mohamed-713b53265/)
@@ -575,6 +758,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support & Contact
 
 For issues, feature requests, or questions:
+
 - **GitHub Issues**: [Report a bug](https://github.com/omaar88/Sehaty-Plus/issues)
 - **Email**: support@sehaty-plus.com
 - **Discord**: [Join our community](https://discord.gg/sehaty-plus)
@@ -590,8 +774,22 @@ For issues, feature requests, or questions:
 
 ---
 
-**Last Updated**: October 2025  
+**Last Updated**: December 2024  
 **Status**: 🟢 Active Development  
-**Version**: 1.0.0 (Beta)
+**Version**: 1.1.0 (Beta)
+
+### 🆕 Recent Updates (v1.1.0)
+
+- ✅ Added Role Management System with full CRUD operations
+- ✅ Implemented Permission-Based Authorization with custom attributes
+- ✅ Added Doctor Management endpoints (Get All, Get By ID)
+- ✅ Added Clinic Management (Add Clinic)
+- ✅ Implemented Change Email feature with OTP verification
+- ✅ Added Repository Pattern with Unit of Work
+- ✅ Docker support with multi-stage builds
+- ✅ Docker Compose setup with SQL Server, Redis, and Redis Insight
+- ✅ Enhanced Specializations with detailed admin views
+- ✅ User Registration endpoints moved to UsersController
+- ✅ Hangfire Dashboard with authentication
 
 Made with ❤️ for better healthcare management

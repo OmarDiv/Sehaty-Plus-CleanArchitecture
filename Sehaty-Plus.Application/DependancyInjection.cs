@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sehaty_Plus.Application.Common.Authentication;
 using Sehaty_Plus.Application.Common.Behaviors;
+using Sehaty_Plus.Application.Common.Interfaces.Services;
 using Sehaty_Plus.Application.Common.Settings;
 
 namespace Sehaty_Plus.Application

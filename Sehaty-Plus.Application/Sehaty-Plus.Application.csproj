@@ -8,6 +8,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Common\Mapping\**" />
+	  <EmbeddedResource Remove="Common\Mapping\**" />
+	  <None Remove="Common\Mapping\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Dapper" Version="2.1.66" />
 		<PackageReference Include="FluentValidation" Version="12.1.0" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
@@ -34,7 +40,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Common\Mapping\" />
 		<Folder Include="Feature\Account\Commands\ConfirmChangeEmail\" />
 		<Folder Include="Feature\Account\Commands\UpdateProfilePicture\" />
 		<Folder Include="Feature\Account\Errors\" />
