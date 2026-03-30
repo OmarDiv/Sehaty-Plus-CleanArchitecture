@@ -21,8 +21,10 @@
     <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="7.4.0" />
   </ItemGroup>
 
+
+
   <ItemGroup>
-    <ProjectReference Include="..\..\Clones\Sehaty-Plus.Domain\Sehaty-Plus.Domain.csproj" />
+    <ProjectReference Include="..\Sehaty-Plus.Domain\Sehaty-Plus.Domain.csproj" />
   </ItemGroup>
 
 </Project>
