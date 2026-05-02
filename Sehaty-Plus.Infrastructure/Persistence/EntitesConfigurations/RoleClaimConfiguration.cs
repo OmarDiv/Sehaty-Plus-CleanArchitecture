@@ -1,19 +1,19 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Sehaty_Plus.Infrastructure.Persistence.Data;
 
 namespace Sehaty_Plus.Infrastructure.Persistence.EntitesConfigurations
 {
-    public class RoleClaims : IEntityTypeConfiguration<IdentityRoleClaim<string>>
+    public class RoleClaims : IEntityTypeConfiguration<IdentityRoleClaim<long>>
     {
-        public void Configure(EntityTypeBuilder<IdentityRoleClaim<string>> builder)
+        public void Configure(EntityTypeBuilder<IdentityRoleClaim<long>> builder)
         {
             //DefaultData
             var permissions = Permissions.GetAllPermissions();
-            var adminClaims = new List<IdentityRoleClaim<string>>();
+            var adminClaims = new List<IdentityRoleClaim<long>>();
 
-            adminClaims = permissions.Select((p, i) => new IdentityRoleClaim<string>
+            adminClaims = permissions.Select((p, i) => new IdentityRoleClaim<long>
             {
                 Id = i + 1,
                 ClaimType = Permissions.Type,

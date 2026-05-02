@@ -4,14 +4,14 @@ using System.Text.Json.Serialization;
 namespace Sehaty_Plus.Application.Feature.Account.Responses
 {
     public record ProfileResponse(
-        string Id,
+        long Id,
         string FirstName,
         string LastName,
         string Email,
         string PhoneNumber,
-        [property: JsonConverter(typeof(JsonStringEnumConverter))] Gender Gender,
+        Gender Gender,
         string? ProfilePicture,
         DateOnly RegisteredDate,
         bool IsActive
-        );
+    );
 }

@@ -1,7 +1,7 @@
 ﻿using Sehaty_Plus.Application.Common.Const;
 
 
-namespace Sehaty_Plus.Application.Feature.User.Commands.RegisterPatient
+namespace Sehaty_Plus.Application.Feature.Users.Commands.RegisterPatient
 {
     public class RegisterPatientValidator : AbstractValidator<RegisterPatient>
     {

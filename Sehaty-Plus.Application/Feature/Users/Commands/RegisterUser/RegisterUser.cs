@@ -1,6 +1,6 @@
 ﻿using Sehaty_Plus.Domain.Enums;
 
-namespace Sehaty_Plus.Application.Feature.User.Commands.RegisterUser
+namespace Sehaty_Plus.Application.Feature.Users.Commands.RegisterUser
 {
     public record RegisterUser(string Email, string Password, string FirstName, string LastName, Gender Gender) : IRequest<Result>;
     public class RegisterUserHandler(IAuthService _authService) : IRequestHandler<RegisterUser, Result>

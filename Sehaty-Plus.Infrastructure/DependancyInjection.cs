@@ -33,11 +33,20 @@ namespace Sehaty_Plus.Infrastructure
                 .AuthConfig(configuration);
 
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
-            services.AddStackExchangeRedisCache(options =>
+            var redisConnection = configuration.GetConnectionString("Redis");
+            if (!string.IsNullOrEmpty(redisConnection))
+            {
+                services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration.GetConnectionString("Redis");
                 options.InstanceName = "SehatyPlus_";
             });
+            }
+            else
+            {
+                services.AddDistributedMemoryCache();
+            }
+
 
             services.AddScoped<IApplicationDbContext>(provider =>
                            provider.GetRequiredService<ApplicationDbContext>());

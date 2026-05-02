@@ -8,7 +8,7 @@ namespace Sehaty_Plus.Application.Feature.Patients.Responses
     string FirstName,
     string LastName,
     string Email,
-  [property: JsonConverter(typeof(JsonStringEnumConverter))] Gender Gender,
+    Gender Gender,
     string PhoneNumber,
     string NationalId,
     string? Governorate,

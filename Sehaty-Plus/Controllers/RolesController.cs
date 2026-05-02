@@ -1,4 +1,4 @@
-﻿using Sehaty_Plus.Application.Common.Types;
+using Sehaty_Plus.Application.Common.Types;
 using Sehaty_Plus.Application.Feature.Roles.Commands.AddRole;
 using Sehaty_Plus.Application.Feature.Roles.Commands.ToggleRoleStatus;
 using Sehaty_Plus.Application.Feature.Roles.Commands.UpdateRole;
@@ -22,7 +22,7 @@ namespace Sehaty_Plus.Controllers
 
         [HttpGet("{id}", Name = nameof(GetById))]
         [HasPermission(Permissions.GetRoles)]
-        public async Task<ActionResult<RoleDetailResponse>> GetById([FromRoute]string id, CancellationToken cancellationToken)
+        public async Task<ActionResult<RoleDetailResponse>> GetById([FromRoute]long id, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(new GetRoleById(id), cancellationToken);
 
@@ -44,7 +44,7 @@ namespace Sehaty_Plus.Controllers
 
         [HttpPut("{id}")]
         [HasPermission(Permissions.UpdateRole)]
-        public async Task<ActionResult<Result>> Update(string id, [FromBody] RoleRequest request, CancellationToken cancellationToken)
+        public async Task<ActionResult<Result>> Update(long id, [FromBody] RoleRequest request, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(new UpdateRole(id, request), cancellationToken);
 
@@ -54,7 +54,7 @@ namespace Sehaty_Plus.Controllers
         [HttpPut("{id}/toggle-status")]
         [HasPermission(Permissions.UpdateRole)]
 
-        public async Task<ActionResult<Result>> ToggleStatus(string id, CancellationToken cancellationToken)
+        public async Task<ActionResult<Result>> ToggleStatus(long id, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(new ToggleRoleStatus(id), cancellationToken);
 

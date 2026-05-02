@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -8,7 +9,7 @@ using System.Reflection;
 using System.Security.Claims;
 namespace Sehaty_Plus.Infrastructure.Persistence;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor _httpContextAccessor) : IdentityDbContext<ApplicationUser, ApplicationRole, string>(options), IApplicationDbContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor _httpContextAccessor) : IdentityDbContext<ApplicationUser, ApplicationRole, long>(options), IApplicationDbContext
 {
     public DbSet<Specialization> Specializations { get; set; }
     public DbSet<Doctor> Doctors { get; set; }
@@ -16,6 +17,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Clinic> Clinics { get; set; }
     public DbSet<DoctorClinic> DoctorClinics { get; set; }
     public DbSet<Otp> Otps { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
@@ -32,14 +34,15 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         var entries = ChangeTracker.Entries<AuditableEntity>();
         foreach (var entityEntry in entries)
         {
-            var CurrentUserId = _httpContextAccessor.HttpContext?.User.FindFirstValue(claimType: ClaimTypes.NameIdentifier);
+            var userIdStr = _httpContextAccessor.HttpContext?.User.FindFirstValue(claimType: ClaimTypes.NameIdentifier);
+            long? currentUserId = userIdStr is null ? null : long.Parse(userIdStr);
             if (entityEntry.State == EntityState.Added)
             {
-                entityEntry.Property(e => e.CreatedById).CurrentValue = CurrentUserId!;
+                entityEntry.Property(e => e.CreatedById).CurrentValue = currentUserId.GetValueOrDefault();
             }
             else if (entityEntry.State == EntityState.Modified)
             {
-                entityEntry.Property(e => e.UpdatedById).CurrentValue = CurrentUserId;
+                entityEntry.Property(e => e.UpdatedById).CurrentValue = currentUserId;
                 entityEntry.Property(e => e.UpdatedOn).CurrentValue = DateTime.UtcNow;
             }
         }

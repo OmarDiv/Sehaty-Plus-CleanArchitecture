@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,7 +15,7 @@ namespace Sehaty_Plus.Application.Common.Authentication
         public (string token, int expiresIn) GenerateToken(ApplicationUser user, IEnumerable<string> roles, IEnumerable<string> permissions)
         {
             Claim[] claims = [
-                new( JwtRegisteredClaimNames.Sub, user.Id),
+                new( JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new( JwtRegisteredClaimNames.Email, user.Email!),
                 new( JwtRegisteredClaimNames.GivenName, user.FirstName),
                 new( JwtRegisteredClaimNames.FamilyName, user.LastName),
@@ -41,7 +41,7 @@ namespace Sehaty_Plus.Application.Common.Authentication
 
         }
 
-        public string? ValidateToken(string token)
+        public long? ValidateToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var symmeticSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));
@@ -57,7 +57,8 @@ namespace Sehaty_Plus.Application.Common.Authentication
                     ClockSkew = TimeSpan.Zero,
                 }, out SecurityToken securityToken);
                 var jwtToken = (JwtSecurityToken)securityToken;
-                return jwtToken.Claims.First(x => x.Type == JwtRegisteredClaimNames.Sub).Value;
+                var sub = jwtToken.Claims.First(x => x.Type == JwtRegisteredClaimNames.Sub).Value;
+                return long.Parse(sub);
             }
             catch
             {

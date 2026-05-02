@@ -1,4 +1,4 @@
-﻿using Mapster;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,10 +22,10 @@ namespace Sehaty_Plus.Infrastructure.Services.Role
                 .ToListAsync(cancellation);
 
 
-        public async Task<Result<RoleDetailResponse>> GetAsync(string roleId)
+        public async Task<Result<RoleDetailResponse>> GetAsync(long roleId)
         {
 
-            if (await _roleManager.FindByIdAsync(roleId) is not { } role)
+            if (await _roleManager.FindByIdAsync(roleId.ToString()) is not { } role)
                 return Result.Failure<RoleDetailResponse>(RoleErrors.NotFound);
             var permissions = await _roleManager.GetClaimsAsync(role);
             var response = new RoleDetailResponse(role.Id, role.Name!, role.IsDeleted, permissions.Select(clam => clam.Value));
@@ -52,7 +52,7 @@ namespace Sehaty_Plus.Infrastructure.Services.Role
             if (result.Succeeded)
             {
                 var permissions = request.Permissions
-                    .Select(x => new IdentityRoleClaim<string>
+                    .Select(x => new IdentityRoleClaim<long>
                     {
                         RoleId = role.Id,
                         ClaimType = Permissions.Type,
@@ -68,9 +68,9 @@ namespace Sehaty_Plus.Infrastructure.Services.Role
             var errors = result.Errors.First();
             return Result.Failure<RoleDetailResponse>(new Error(errors.Code, errors.Description, StatusCodes.Status400BadRequest));
         }
-        public async Task<Result> UpdateRoleAsync(string id, RoleRequest request, CancellationToken cancellation = default)
+        public async Task<Result> UpdateRoleAsync(long id, RoleRequest request, CancellationToken cancellation = default)
         {
-            if (await _roleManager.FindByIdAsync(id) is not { } role)
+            if (await _roleManager.FindByIdAsync(id.ToString()) is not { } role)
                 return Result.Failure<RoleDetailResponse>(RoleErrors.NotFound);
 
             var roleExists = await _roleManager.Roles.AnyAsync(r => r.Name == request.Name && r.Id != id);
@@ -94,7 +94,7 @@ namespace Sehaty_Plus.Infrastructure.Services.Role
                     .Select(r => r.ClaimValue)
                     .ToListAsync();
 
-                var newPermissions = request.Permissions.Except(currentpermissions).Select(x => new IdentityRoleClaim<string>
+                var newPermissions = request.Permissions.Except(currentpermissions).Select(x => new IdentityRoleClaim<long>
                 {
                     RoleId = role.Id,
                     ClaimType = Permissions.Type,
@@ -116,9 +116,9 @@ namespace Sehaty_Plus.Infrastructure.Services.Role
             return Result.Failure<RoleDetailResponse>(new Error(errors.Code, errors.Description, StatusCodes.Status400BadRequest));
         }
 
-        public async Task<Result> ToggleStatusAsync(string id)
+        public async Task<Result> ToggleStatusAsync(long id)
         {
-            if (await _roleManager.FindByIdAsync(id) is not { } role)
+            if (await _roleManager.FindByIdAsync(id.ToString()) is not { } role)
                 return Result.Failure<RoleDetailResponse>(RoleErrors.NotFound);
             role.IsDeleted = !role.IsDeleted;
             await _roleManager.UpdateAsync(role);

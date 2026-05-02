@@ -1,8 +1,8 @@
-﻿namespace Sehaty_Plus.Application.Common.Authentication
+namespace Sehaty_Plus.Application.Common.Authentication
 {
     public interface IJwtProvider
     {
         (string token, int expiresIn) GenerateToken(ApplicationUser user, IEnumerable<string> roles, IEnumerable<string> permissions);
-        string? ValidateToken(string token);
+        long? ValidateToken(string token);
     }
 }

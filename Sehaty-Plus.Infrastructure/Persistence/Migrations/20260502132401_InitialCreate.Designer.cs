@@ -12,20 +12,20 @@ using Sehaty_Plus.Infrastructure.Persistence;
 namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251111224245_SeedingIdentityTables")]
-    partial class SeedingIdentityTables
+    [Migration("20260502132401_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "10.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,9 +39,8 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -55,291 +54,291 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                             Id = 1,
                             ClaimType = "permissions",
                             ClaimValue = "specializations:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 2,
                             ClaimType = "permissions",
                             ClaimValue = "specializations:add",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 3,
                             ClaimType = "permissions",
                             ClaimValue = "specializations:update",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 4,
                             ClaimType = "permissions",
                             ClaimValue = "specializations:delete",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 5,
                             ClaimType = "permissions",
                             ClaimValue = "specializations:toggle",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 6,
                             ClaimType = "permissions",
                             ClaimValue = "patients:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 7,
                             ClaimType = "permissions",
                             ClaimValue = "patients:details",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 8,
                             ClaimType = "permissions",
                             ClaimValue = "patients:add",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 9,
                             ClaimType = "permissions",
                             ClaimValue = "patients:update",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 10,
                             ClaimType = "permissions",
                             ClaimValue = "patients:delete",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 11,
                             ClaimType = "permissions",
                             ClaimValue = "doctors:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 12,
                             ClaimType = "permissions",
                             ClaimValue = "doctors:details",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 13,
                             ClaimType = "permissions",
                             ClaimValue = "doctors:add",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 14,
                             ClaimType = "permissions",
                             ClaimValue = "doctors:update",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 15,
                             ClaimType = "permissions",
                             ClaimValue = "doctors:delete",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 16,
                             ClaimType = "permissions",
                             ClaimValue = "doctors:verify",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 17,
                             ClaimType = "permissions",
                             ClaimValue = "clinics:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 18,
                             ClaimType = "permissions",
                             ClaimValue = "clinics:add",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 19,
                             ClaimType = "permissions",
                             ClaimValue = "clinics:update",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 20,
                             ClaimType = "permissions",
                             ClaimValue = "clinics:delete",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 21,
                             ClaimType = "permissions",
                             ClaimValue = "clinics:toggle",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 22,
                             ClaimType = "permissions",
                             ClaimValue = "appointments:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 23,
                             ClaimType = "permissions",
                             ClaimValue = "appointments:add",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 24,
                             ClaimType = "permissions",
                             ClaimValue = "appointments:update",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 25,
                             ClaimType = "permissions",
                             ClaimValue = "appointments:cancel",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 26,
                             ClaimType = "permissions",
                             ClaimValue = "appointments:confirm",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 27,
                             ClaimType = "permissions",
                             ClaimValue = "users:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 28,
                             ClaimType = "permissions",
                             ClaimValue = "users:add",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 29,
                             ClaimType = "permissions",
                             ClaimValue = "users:update",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 30,
                             ClaimType = "permissions",
                             ClaimValue = "users:delete",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 31,
                             ClaimType = "permissions",
                             ClaimValue = "users:toggle",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 32,
                             ClaimType = "permissions",
                             ClaimValue = "roles:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 33,
                             ClaimType = "permissions",
                             ClaimValue = "roles:add",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 34,
                             ClaimType = "permissions",
                             ClaimValue = "roles:update",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 35,
                             ClaimType = "permissions",
                             ClaimValue = "roles:delete",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 36,
                             ClaimType = "permissions",
                             ClaimValue = "roles:permissions",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 37,
                             ClaimType = "permissions",
                             ClaimValue = "reports:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 38,
                             ClaimType = "permissions",
                             ClaimValue = "reports:export",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 39,
                             ClaimType = "permissions",
                             ClaimValue = "analytics:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 40,
                             ClaimType = "permissions",
                             ClaimValue = "settings:manage",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         },
                         new
                         {
                             Id = 41,
                             ClaimType = "permissions",
                             ClaimValue = "logs:read",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            RoleId = 1L
                         });
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<long>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -353,9 +352,8 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -364,7 +362,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -375,9 +373,8 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -386,13 +383,13 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<long>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -403,15 +400,15 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "019a72b4-22b3-7297-aed0-a55034375f18",
-                            RoleId = "019a72b4-22b5-752d-99a9-70ba20a93b20"
+                            UserId = 1L,
+                            RoleId = 1L
                         });
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -429,8 +426,11 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Sehaty_Plus.Domain.Entities.ApplicationRole", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -462,7 +462,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "019a72b4-22b5-752d-99a9-70ba20a93b20",
+                            Id = 1L,
                             ConcurrencyStamp = "019a72b4-22b5-752d-99a9-70bdfa2b942c",
                             IsDefault = false,
                             IsDeleted = false,
@@ -471,7 +471,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                         },
                         new
                         {
-                            Id = "019a72b4-22b6-7d48-ae78-8572c7a26b07",
+                            Id = 2L,
                             ConcurrencyStamp = "019a72b4-22b6-7d48-ae78-8573b711cae0",
                             IsDefault = true,
                             IsDeleted = false,
@@ -480,7 +480,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                         },
                         new
                         {
-                            Id = "019a72b4-22b5-752d-99a9-70bc36061c72",
+                            Id = 4L,
                             ConcurrencyStamp = "019a72b4-22b5-752d-99a9-70bf3e8cc322",
                             IsDefault = false,
                             IsDeleted = false,
@@ -489,7 +489,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                         },
                         new
                         {
-                            Id = "019a72b4-22b5-752d-99a9-70bbe5beed4c",
+                            Id = 3L,
                             ConcurrencyStamp = "019a72b4-22b5-752d-99a9-70beb6aceeca",
                             IsDefault = false,
                             IsDeleted = false,
@@ -500,8 +500,11 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Sehaty_Plus.Domain.Entities.ApplicationUser", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -519,8 +522,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
@@ -530,14 +532,17 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NationalId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -572,6 +577,9 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<int>("UserType")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -584,10 +592,14 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
 
                     b.ToTable("AspNetUsers", (string)null);
 
+                    b.HasDiscriminator<int>("UserType").HasValue(1);
+
+                    b.UseTphMappingStrategy();
+
                     b.HasData(
                         new
                         {
-                            Id = "019a72b4-22b3-7297-aed0-a55034375f18",
+                            Id = 1L,
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "019a72b4-22b5-752d-99a9-70b93dfe3258",
                             Email = "admin@sehaty-plus.com",
@@ -597,6 +609,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                             IsActive = true,
                             LastName = "Admin",
                             LockoutEnabled = false,
+                            NationalId = "",
                             NormalizedEmail = "ADMIN@SEHATY-PLUS.COM",
                             NormalizedUserName = "ADMIN@SEHATY-PLUS.COM",
                             PasswordHash = "AQAAAAIAAYagAAAAENbAD+udZ2X1bEmN/mP4cH0YEEpVaaVq6/5FXf8hys0WsIl1PFMic3ZuU+DfKsvdJQ==",
@@ -604,17 +617,18 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                             RegisteredDate = new DateOnly(2025, 11, 12),
                             SecurityStamp = "019a72b4-22b5-752d-99a9-70b863ac6dae",
                             TwoFactorEnabled = false,
-                            UserName = "admin@sehaty-plus.com"
+                            UserName = "admin@sehaty-plus.com",
+                            UserType = 1
                         });
                 });
 
             modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Clinic", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -642,19 +656,18 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<decimal?>("Latitude")
-                        .HasPrecision(10, 6)
-                        .HasColumnType("decimal(10,6)");
+                        .HasPrecision(9, 6)
+                        .HasColumnType("decimal(9,6)");
 
                     b.Property<decimal?>("Longitude")
-                        .HasPrecision(10, 6)
-                        .HasColumnType("decimal(10,6)");
+                        .HasPrecision(9, 6)
+                        .HasColumnType("decimal(9,6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -662,60 +675,16 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.ToTable("Clinics");
                 });
 
-            modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Doctor", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Biography")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("Education")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("IsVerified")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LicenseNumber")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<int>("SpecializationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("YearsOfExperience")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LicenseNumber")
-                        .IsUnique();
-
-                    b.HasIndex("SpecializationId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Doctors");
-                });
-
             modelBuilder.Entity("Sehaty_Plus.Domain.Entities.DoctorClinic", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<int>("ClinicId")
-                        .HasColumnType("int");
+                    b.Property<long?>("ClinicId")
+                        .HasColumnType("bigint");
 
                     b.Property<decimal?>("ConsultationFee")
                         .HasPrecision(10, 2)
@@ -724,9 +693,8 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DoctorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long?>("DoctorId")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsPrimary")
                         .HasColumnType("bit");
@@ -758,9 +726,8 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -769,85 +736,32 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.ToTable("Otps");
                 });
 
-            modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Patient", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Allergies")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BloodType")
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EmergencyContact")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("Governorate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MedicalHistory")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NationalId")
-                        .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("nvarchar(14)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NationalId")
-                        .IsUnique();
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Patients");
-                });
-
             modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Specialization", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("CreatedById")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("UpdatedById")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<long?>("UpdatedById")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -864,7 +778,71 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.ToTable("Specializations");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Doctor", b =>
+                {
+                    b.HasBaseType("Sehaty_Plus.Domain.Entities.ApplicationUser");
+
+                    b.Property<string>("Biography")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Education")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LicenseNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("SpecializationId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("Title")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("YearsOfExperience")
+                        .HasColumnType("int");
+
+                    b.HasIndex("SpecializationId");
+
+                    b.HasDiscriminator().HasValue(2);
+                });
+
+            modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Patient", b =>
+                {
+                    b.HasBaseType("Sehaty_Plus.Domain.Entities.ApplicationUser");
+
+                    b.Property<string>("Allergies")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BloodType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly?>("DateOfBirth")
+                        .HasColumnType("date");
+
+                    b.Property<string>("EmergencyContactName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmergencyContactPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Governorate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicalHistory")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue(3);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
                     b.HasOne("Sehaty_Plus.Domain.Entities.ApplicationRole", null)
                         .WithMany()
@@ -873,7 +851,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<long>", b =>
                 {
                     b.HasOne("Sehaty_Plus.Domain.Entities.ApplicationUser", null)
                         .WithMany()
@@ -882,7 +860,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
                 {
                     b.HasOne("Sehaty_Plus.Domain.Entities.ApplicationUser", null)
                         .WithMany()
@@ -891,7 +869,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<long>", b =>
                 {
                     b.HasOne("Sehaty_Plus.Domain.Entities.ApplicationRole", null)
                         .WithMany()
@@ -906,7 +884,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
                 {
                     b.HasOne("Sehaty_Plus.Domain.Entities.ApplicationUser", null)
                         .WithMany()
@@ -919,8 +897,8 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                 {
                     b.OwnsMany("Sehaty_Plus.Domain.Entities.RefreshToken", "RefreshTokens", b1 =>
                         {
-                            b1.Property<string>("UserId")
-                                .HasColumnType("nvarchar(450)");
+                            b1.Property<long>("UserId")
+                                .HasColumnType("bigint");
 
                             b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
@@ -952,38 +930,15 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.Navigation("RefreshTokens");
                 });
 
-            modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Doctor", b =>
-                {
-                    b.HasOne("Sehaty_Plus.Domain.Entities.Specialization", "Specialization")
-                        .WithMany("Doctors")
-                        .HasForeignKey("SpecializationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Sehaty_Plus.Domain.Entities.ApplicationUser", "User")
-                        .WithOne("Doctor")
-                        .HasForeignKey("Sehaty_Plus.Domain.Entities.Doctor", "UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Specialization");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Sehaty_Plus.Domain.Entities.DoctorClinic", b =>
                 {
                     b.HasOne("Sehaty_Plus.Domain.Entities.Clinic", "Clinic")
                         .WithMany("DoctorClinics")
-                        .HasForeignKey("ClinicId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ClinicId");
 
                     b.HasOne("Sehaty_Plus.Domain.Entities.Doctor", "Doctor")
                         .WithMany("DoctorClinics")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("DoctorId");
 
                     b.Navigation("Clinic");
 
@@ -995,17 +950,6 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.HasOne("Sehaty_Plus.Domain.Entities.ApplicationUser", "User")
                         .WithMany("Otps")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Patient", b =>
-                {
-                    b.HasOne("Sehaty_Plus.Domain.Entities.ApplicationUser", "User")
-                        .WithOne("Patient")
-                        .HasForeignKey("Sehaty_Plus.Domain.Entities.Patient", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1029,13 +973,18 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.Navigation("UpdatedBy");
                 });
 
+            modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Doctor", b =>
+                {
+                    b.HasOne("Sehaty_Plus.Domain.Entities.Specialization", "Specialization")
+                        .WithMany("Doctors")
+                        .HasForeignKey("SpecializationId");
+
+                    b.Navigation("Specialization");
+                });
+
             modelBuilder.Entity("Sehaty_Plus.Domain.Entities.ApplicationUser", b =>
                 {
-                    b.Navigation("Doctor");
-
                     b.Navigation("Otps");
-
-                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Clinic", b =>
@@ -1043,14 +992,14 @@ namespace Sehaty_Plus.Infrastructure.Persistence.Migrations
                     b.Navigation("DoctorClinics");
                 });
 
-            modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Doctor", b =>
-                {
-                    b.Navigation("DoctorClinics");
-                });
-
             modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Specialization", b =>
                 {
                     b.Navigation("Doctors");
+                });
+
+            modelBuilder.Entity("Sehaty_Plus.Domain.Entities.Doctor", b =>
+                {
+                    b.Navigation("DoctorClinics");
                 });
 #pragma warning restore 612, 618
         }

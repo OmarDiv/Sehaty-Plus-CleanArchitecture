@@ -1,4 +1,4 @@
-﻿using Sehaty_Plus.Application.Common.Interfaces.Persistence;
+using Sehaty_Plus.Application.Common.Interfaces.Persistence;
 using Sehaty_Plus.Application.Feature.Auth.Errors;
 using Sehaty_Plus.Domain.Entities;
 using System;
@@ -68,8 +68,8 @@ namespace Sehaty_Plus.Application.Feature.Clinc.Commands.AddClinc
 
                 throw;
             }
-            
-           
+
+
             return Result.Success();
         }
     }

@@ -1,10 +1,10 @@
-﻿using Sehaty_Plus.Application.Common.Interfaces.Services;
+using Sehaty_Plus.Application.Common.Interfaces.Services;
 using Sehaty_Plus.Application.Feature.Account.Responses;
 using Sehaty_Plus.Application.Feature.Auth.Errors;
 
 namespace Sehaty_Plus.Application.Feature.Account.Queries.GetProfile
 {
-    public record GetProfile(string UserId) : IRequest<Result<ProfileResponse>>;
+    public record GetProfile(long UserId) : IRequest<Result<ProfileResponse>>;
     public class GetProfileHandler(IQueryExecuter _queryExecuter) : IRequestHandler<GetProfile, Result<ProfileResponse>>
     {
         public async Task<Result<ProfileResponse>> Handle(GetProfile request, CancellationToken cancellationToken)

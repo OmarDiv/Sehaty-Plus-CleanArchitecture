@@ -1,8 +1,10 @@
-﻿namespace Sehaty_Plus.Domain.Entities;
+﻿using Hajj.Domain.Shared.Interfaces;
 
-public class Clinic
+namespace Sehaty_Plus.Domain.Entities;
+
+public class Clinic : IEntity
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
     public string Area { get; set; } = string.Empty;

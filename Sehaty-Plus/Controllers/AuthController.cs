@@ -19,7 +19,7 @@ namespace Sehaty_Plus.Controllers
     {
         private readonly IMediator _mediator = mediator;
 
-        [HttpPost("")]
+        [HttpPost("Login")]
         public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginUser request, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(request, cancellationToken);

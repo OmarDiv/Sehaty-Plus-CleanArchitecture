@@ -1,7 +1,7 @@
 ﻿using Sehaty_Plus.Application.Common.Types;
-using Sehaty_Plus.Application.Feature.User.Commands.RegisterDoctor;
-using Sehaty_Plus.Application.Feature.User.Commands.RegisterPatient;
-using Sehaty_Plus.Application.Feature.User.Commands.RegisterUser;
+using Sehaty_Plus.Application.Feature.Users.Commands.RegisterDoctor;
+using Sehaty_Plus.Application.Feature.Users.Commands.RegisterPatient;
+using Sehaty_Plus.Application.Feature.Users.Commands.RegisterUser;
 
 namespace Sehaty_Plus.Controllers
 {

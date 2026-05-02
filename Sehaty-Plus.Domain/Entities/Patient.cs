@@ -1,19 +1,17 @@
-﻿namespace Sehaty_Plus.Domain.Entities
+using Sehaty_Plus.Domain.Enums;
+
+namespace Sehaty_Plus.Domain.Entities
 {
-    public class Patient
+    public class Patient : ApplicationUser
     {
-        public string Id { get; set; } = Guid.CreateVersion7().ToString();
-        public string UserId { get; set; } = string.Empty;
-        public string NationalId { get; set; } = string.Empty;
-        public DateTime DateOfBirth { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
         public string Governorate { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;
-        public string? BloodType { get; set; }
-        public string? EmergencyContact { get; set; }
+        public BloodType? BloodType { get; set; }
+        public string? EmergencyContactName { get; set; }
+        public string? EmergencyContactPhone { get; set; }
         public string? MedicalHistory { get; set; }
         public string? Allergies { get; set; }
-
-        public ApplicationUser User { get; set; } = default!;
     }
 }
 

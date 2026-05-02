@@ -7,7 +7,7 @@ namespace Sehaty_Plus.Application.Feature.Patients.Responses
         string PatientId,
         string FirstName,
         string LastName,
-        [property: JsonConverter(typeof(JsonStringEnumConverter))] Gender Gender,
+        Gender Gender,
         string? BloodType,
         string? Governorate,
         string? City,

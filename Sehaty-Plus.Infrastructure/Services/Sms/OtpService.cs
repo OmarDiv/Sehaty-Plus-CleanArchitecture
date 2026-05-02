@@ -1,4 +1,4 @@
-﻿using Sehaty_Plus.Application.Common.SmsService.YourApp.Application.Interfaces.Services;
+using Sehaty_Plus.Application.Common.SmsService.YourApp.Application.Interfaces.Services;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -6,7 +6,7 @@ namespace Sehaty_Plus.Infrastructure.Services.Sms
 {
     public class OtpService : IOtpService
     {
-        public (Otp otp, string plainCode) GenerateOtp(string userId)
+        public (Otp otp, string plainCode) GenerateOtp(long userId)
         {
             var plainCode = GenerateOtpCode();
             var hashedCode = HashOtpCode(plainCode);

@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sehaty_Plus.Application.Common.Authentication;
 using Sehaty_Plus.Application.Common.Behaviors;
 using Sehaty_Plus.Application.Common.Interfaces.Services;
 using Sehaty_Plus.Application.Common.Settings;
+using static Dapper.SqlMapper;
 
 namespace Sehaty_Plus.Application
 {
@@ -20,6 +20,11 @@ namespace Sehaty_Plus.Application
             services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
             services.Configure<TwilioSettings>(configuration.GetSection(TwilioSettings.SectionName));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            AddTypeHandler(new DateOnlyTypeHandler());
+            AddTypeHandler(new TimeOnlyTypeHandler());
+            AddTypeHandler(new EnumerableIntTypeHandler());
+            AddTypeHandler(new AnyTypeHandler<float[]>());
+
             return services;
         }
     }

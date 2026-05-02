@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Sehaty_Plus.Application.Common.Interfaces.Services;
 using Sehaty_Plus.Application.Common.SmsService.YourApp.Application.Interfaces.Services;
 
 namespace Sehaty_Plus.Application.Feature.Account.Commands.ChangeEmail
 {
-    public record ChangeEmail(string UserId) : IRequest<Result>;
+    public record ChangeEmail(long UserId) : IRequest<Result>;
     public class ChagneEmailHandler(UserManager<ApplicationUser> _userManager, IEmailSenderService _emailSenderService, IOtpService _otpService) : IRequestHandler<ChangeEmail, Result>
     {
         public async Task<Result> Handle(ChangeEmail request, CancellationToken cancellationToken)

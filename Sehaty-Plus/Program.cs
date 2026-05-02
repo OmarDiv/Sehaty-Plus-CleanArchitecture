@@ -1,7 +1,6 @@
 using Hangfire;
 using HangfireBasicAuthenticationFilter;
 using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
 using Sehaty_Plus;
 using Sehaty_Plus.Application;
 using Sehaty_Plus.Infrastructure;
@@ -21,10 +20,11 @@ builder.Host.UseSerilog((context, configuration) =>
 });
 
 var app = builder.Build();
+app.UseExceptionHandler();
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 app.UseHangfireDashboard("/Jobs",
     new DashboardOptions
@@ -40,14 +40,12 @@ app.UseHangfireDashboard("/Jobs",
     }
 );
 //Apply pending migrations at application startup With Docker
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.Migrate();
-}
-
+//using (var scope = app.Services.CreateScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+//    db.Database.Migrate();
+//}
 app.UseHttpsRedirection();
-app.UseExceptionHandler();
 app.UseSerilogRequestLogging();
 app.UseRouting();
 app.UseCors();

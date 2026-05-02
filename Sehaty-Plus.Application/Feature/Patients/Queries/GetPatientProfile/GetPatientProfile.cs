@@ -1,9 +1,9 @@
-﻿using Sehaty_Plus.Application.Common.Interfaces.Services;
+using Sehaty_Plus.Application.Common.Interfaces.Services;
 using Sehaty_Plus.Application.Feature.Auth.Errors;
 
 namespace Sehaty_Plus.Application.Feature.Patients.Queries.GetPatientProfile
 {
-    public record GetPatientProfile(string UserId) : IRequest<Result<PatientProfileResponse>>;
+    public record GetPatientProfile(long UserId) : IRequest<Result<PatientProfileResponse>>;
     public class GetPatientProfileHandler(IQueryExecuter _queryExecuter) : IRequestHandler<GetPatientProfile, Result<PatientProfileResponse>>
     {
         public async Task<Result<PatientProfileResponse>> Handle(GetPatientProfile request, CancellationToken cancellationToken)

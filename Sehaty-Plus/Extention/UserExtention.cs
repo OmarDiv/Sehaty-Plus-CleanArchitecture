@@ -1,9 +1,12 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 namespace Sehaty_Plus.Extention
 {
     public static class UserExtensions
     {
-        public static string? GetUserId(this ClaimsPrincipal user) =>
-            user.FindFirstValue(ClaimTypes.NameIdentifier);
+        public static long GetUserId(this ClaimsPrincipal user)
+        {
+            var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
+            return long.Parse(userId);
+        }
     }
 }

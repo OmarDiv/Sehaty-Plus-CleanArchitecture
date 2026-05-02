@@ -1,11 +1,11 @@
-﻿using Sehaty_Plus.Application.Feature.Roles.Services;
+using Sehaty_Plus.Application.Feature.Roles.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Sehaty_Plus.Application.Feature.Roles.Commands.ToggleRoleStatus
 {
-    public  record ToggleRoleStatus(string RoleId) : IRequest<Result>;
+    public  record ToggleRoleStatus(long RoleId) : IRequest<Result>;
     public class ToggleRoleStatusHandler(IRoleService _roleService) : IRequestHandler<ToggleRoleStatus, Result>
     {
         public async Task<Result> Handle(ToggleRoleStatus request, CancellationToken cancellationToken)

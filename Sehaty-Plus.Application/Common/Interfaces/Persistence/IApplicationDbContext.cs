@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Sehaty_Plus.Application.Common.Interfaces.Persistence
@@ -12,7 +12,7 @@ namespace Sehaty_Plus.Application.Common.Interfaces.Persistence
         DbSet<DoctorClinic> DoctorClinics { get; set; }
         DbSet<Otp> Otps { get; set; }
         DbSet<ApplicationRole> Roles { get; set; }
-        DbSet<IdentityRoleClaim<string>> RoleClaims { get; set; }
+        DbSet<IdentityRoleClaim<long>> RoleClaims { get; set; }
 
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
         Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);

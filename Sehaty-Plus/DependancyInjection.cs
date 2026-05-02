@@ -18,7 +18,9 @@ namespace Sehaty_Plus
                 .AllowAnyHeader()
                 .WithOrigins(configuration.GetSection("AllowedOrigins").Get<string[]>()!));
             });
-            services.AddEndpointsApiExplorer().AddOpenApi();
+            services.AddExceptionHandler<GlobalExceptionHandler>();
+            services.AddSwaggerGen();
+            services.AddEndpointsApiExplorer();
             services.AddAuthorization(
                 options =>
                 {
@@ -27,7 +29,6 @@ namespace Sehaty_Plus
                 }
             );
 
-            services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
             services.AddBackgroundJobsConfig(configuration);
             services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();

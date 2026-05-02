@@ -1,10 +1,12 @@
-﻿namespace Sehaty_Plus.Domain.Entities;
+﻿using Hajj.Domain.Shared.Interfaces;
 
-public class DoctorClinic
+namespace Sehaty_Plus.Domain.Entities;
+
+public class DoctorClinic : IEntity
 {
-    public int Id { get; set; }
-    public string DoctorId { get; set; } = string.Empty;
-    public int ClinicId { get; set; }
+    public long Id { get; set; }
+    public long? DoctorId { get; set; }
+    public long? ClinicId { get; set; }
     public bool IsPrimary { get; set; }
     public decimal? ConsultationFee { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

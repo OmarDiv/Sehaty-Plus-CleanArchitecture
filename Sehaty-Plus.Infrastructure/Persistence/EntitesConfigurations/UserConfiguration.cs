@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Sehaty_Plus.Domain.Enums;
 using Sehaty_Plus.Infrastructure.Persistence.Data;
@@ -10,15 +9,17 @@ namespace Sehaty_Plus.Infrastructure.Persistence.EntitesConfigurations
     {
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
+            builder.UseTphMappingStrategy()
+                 .HasDiscriminator(u => u.UserType)
+                 .HasValue<ApplicationUser>(UserType.Admin)
+                 .HasValue<Patient>(UserType.Patient)
+                 .HasValue<Doctor>(UserType.Doctor)
+                 ;
             builder.OwnsMany(x => x.RefreshTokens)
                 .ToTable("RefreshTokens")
                 .WithOwner()
                 .HasForeignKey("UserId");
 
-            builder.Property(x => x.FirstName)
-                .HasMaxLength(100);
-            builder.Property(x => x.LastName)
-                .HasMaxLength(100);
             builder.HasData(new ApplicationUser
             {
                 Id = DefaultUsers.Admin.Id,
@@ -34,6 +35,7 @@ namespace Sehaty_Plus.Infrastructure.Persistence.EntitesConfigurations
                 PasswordHash = DefaultUsers.Admin.PasswordHased,
                 RegisteredDate = new DateOnly(2025, 11, 12),
                 Gender = Gender.Male,
+                UserType = UserType.Admin,
                 IsActive = true,
             });
 

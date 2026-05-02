@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Sehaty_Plus.Application.Feature.Auth.Errors;
 using Sehaty_Plus.Domain.Enums;
 
 namespace Sehaty_Plus.Application.Feature.Account.Commands.UpdateProfile
 {
-    public record UpdateProfileDto(string FirstName, string LastName, Gender Gender);
-    public record UpdateProfile(string UserId, string FirstName, string LastName, Gender Gender) : IRequest<Result>;
+    public record UpdateProfileDto(string FirstName, string LastName, Domain.Enums.Gender Gender);
+    public record UpdateProfile(long UserId, string FirstName, string LastName, Domain.Enums.Gender Gender) : IRequest<Result>;
     public class UpdateProfileHandler(UserManager<ApplicationUser> _userManager) : IRequestHandler<UpdateProfile, Result>
     {
         public async Task<Result> Handle(UpdateProfile request, CancellationToken cancellationToken)
         {
-            if (await _userManager.FindByIdAsync(request.UserId) is not { } user)
+            if (await _userManager.FindByIdAsync(request.UserId.ToString()) is not { } user)
                 return Result.Failure(UserErrors.InvalidCredentials);
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;

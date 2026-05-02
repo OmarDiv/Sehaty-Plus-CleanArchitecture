@@ -2,9 +2,9 @@
 using Sehaty_Plus.Application.Feature.Auth.Commands.ConfirmResetPassword;
 using Sehaty_Plus.Application.Feature.Auth.Commands.ResendConfirmEmail;
 using Sehaty_Plus.Application.Feature.Auth.Commands.VerfiyForgetPasswordOtp;
-using Sehaty_Plus.Application.Feature.User.Commands.RegisterDoctor;
-using Sehaty_Plus.Application.Feature.User.Commands.RegisterPatient;
-using Sehaty_Plus.Application.Feature.User.Commands.RegisterUser;
+using Sehaty_Plus.Application.Feature.Users.Commands.RegisterDoctor;
+using Sehaty_Plus.Application.Feature.Users.Commands.RegisterPatient;
+using Sehaty_Plus.Application.Feature.Users.Commands.RegisterUser;
 namespace Sehaty_Plus.Application.Feature.Auth.Services
 {
     public interface IAuthService

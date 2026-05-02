@@ -1,4 +1,4 @@
-﻿using Hangfire;
+using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -17,9 +17,9 @@ using Sehaty_Plus.Application.Feature.Auth.Errors;
 using Sehaty_Plus.Application.Feature.Auth.Responses;
 using Sehaty_Plus.Application.Feature.Auth.Services;
 using Sehaty_Plus.Application.Feature.Patients.Errors;
-using Sehaty_Plus.Application.Feature.User.Commands.RegisterDoctor;
-using Sehaty_Plus.Application.Feature.User.Commands.RegisterPatient;
-using Sehaty_Plus.Application.Feature.User.Commands.RegisterUser;
+using Sehaty_Plus.Application.Feature.Users.Commands.RegisterDoctor;
+using Sehaty_Plus.Application.Feature.Users.Commands.RegisterPatient;
+using Sehaty_Plus.Application.Feature.Users.Commands.RegisterUser;
 using Sehaty_Plus.Infrastructure.Persistence;
 using Sehaty_Plus.Infrastructure.Persistence.Data;
 using System.Security.Cryptography;
@@ -72,9 +72,9 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
         }
         public async Task<Result<AuthResponse>> GetRefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken = default)
         {
-            if (_jwtProvider.ValidateToken(token) is not string userId)
+            if (_jwtProvider.ValidateToken(token) is not long userId)
                 return Result.Failure<AuthResponse>(UserErrors.InvalidUserOrRefershToken);
-            if (await _userManager.FindByIdAsync(userId) is not { } user)
+            if (await _userManager.FindByIdAsync(userId.ToString()) is not { } user)
                 return Result.Failure<AuthResponse>(UserErrors.InvalidUserOrRefershToken);
             if (user.RefreshTokens.SingleOrDefault(rt => rt.Token == refreshToken && rt.IsActive) is not { } oldRefreshToken)
                 return Result.Failure<AuthResponse>(UserErrors.InvalidUserOrRefershToken);
@@ -119,9 +119,9 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
 
         public async Task<Result> RevokeRefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken = default)
         {
-            if (_jwtProvider.ValidateToken(token) is not string userId)
+            if (_jwtProvider.ValidateToken(token) is not long userId)
                 return Result.Failure(UserErrors.InvalidUserOrRefershToken);
-            if (await _userManager.FindByIdAsync(userId) is not { } user)
+            if (await _userManager.FindByIdAsync(userId.ToString()) is not { } user)
                 return Result.Failure(UserErrors.InvalidUserOrRefershToken);
             if (user.RefreshTokens.SingleOrDefault(rt => rt.Token == refreshToken && rt.IsActive) is not { } oldRefreshToken)
                 return Result.Failure(UserErrors.InvalidUserOrRefershToken);
@@ -169,17 +169,17 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
                          return Result.Failure(UserErrors.InvalidCredentials);
 
                      }
-                     var patient = new Patient
-                     {
-                         UserId = user.Id,
-                         NationalId = request.NationalId,
-                         DateOfBirth = request.DateOfBirth,
-                         BloodType = request.BloodType,
-                         EmergencyContact = request.EmergencyContact,
-                         Allergies = request.Allergies
-                     };
+                     //var patient = new Patient
+                     //{
+                     //    UserId = user.Id,
+                     //    NationalId = request.NationalId,
+                     //    DateOfBirth = request.DateOfBirth,
+                     //    BloodType = request.BloodType,
+                     //    EmergencyContact = request.EmergencyContact,
+                     //    Allergies = request.Allergies
+                     //};
 
-                     await _context.Patients.AddAsync(patient);
+                     //await _context.Patients.AddAsync(patient);
                      await _userManager.AddToRoleAsync(user, DefaultRoles.Patient.Name);
                      await _context.SaveChangesAsync(cancellationToken);
 
@@ -233,19 +233,19 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
                         throw new Exception($"User creation failed: {errors}");
                     }
 
-                    var doctor = new Doctor
-                    {
-                        UserId = user.Id,
-                        LicenseNumber = request.LicenseNumber,
-                        YearsOfExperience = request.YearsOfExperience,
-                        Biography = request.Biography,
-                        Education = request.Education,
-                        SpecializationId = request.SpecializationId,
-                        IsVerified = false
-                    };
+                    //var doctor = new Doctor
+                    //{
+                    //    UserId = user.Id,
+                    //    LicenseNumber = request.LicenseNumber,
+                    //    YearsOfExperience = request.YearsOfExperience,
+                    //    Biography = request.Biography,
+                    //    Education = request.Education,
+                    //    SpecializationId = request.SpecializationId,
+                    //    IsVerified = false
+                    //};
 
-                    await dbContext.Doctors.AddAsync(doctor, cancellationToken);
-                    await _userManager.AddToRoleAsync(user, DefaultRoles.Doctor.Name);
+                    //await dbContext.Doctors.AddAsync(doctor, cancellationToken);
+                    //await _userManager.AddToRoleAsync(user, DefaultRoles.Doctor.Name);
                     await dbContext.SaveChangesAsync(cancellationToken);
                     await transaction.CommitAsync(cancellationToken);
 
@@ -288,7 +288,7 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
 
         public async Task<Result> ConfirmEmailAsync(ConfirmEmail request, CancellationToken cancellationToken)
         {
-            if (await _userManager.FindByIdAsync(request.UserId) is not { } user)
+            if (await _userManager.FindByIdAsync(request.UserId.ToString()) is not { } user)
                 return Result.Failure(UserErrors.InvaildCode);
             if (user.EmailConfirmed)
                 return Result.Failure(UserErrors.DuplicatedConfirmation);

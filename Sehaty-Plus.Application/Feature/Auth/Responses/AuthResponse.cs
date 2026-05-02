@@ -1,7 +1,7 @@
-﻿namespace Sehaty_Plus.Application.Feature.Auth.Responses
+namespace Sehaty_Plus.Application.Feature.Auth.Responses
 {
     public record AuthResponse(
-     string Id,
+     long Id,
      string? Email,
      string FirstName,
      string LastName,

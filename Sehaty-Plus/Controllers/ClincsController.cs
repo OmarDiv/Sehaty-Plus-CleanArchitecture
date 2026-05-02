@@ -1,4 +1,4 @@
-﻿using Sehaty_Plus.Application.Common.Authentication;
+using Sehaty_Plus.Application.Common.Authentication;
 using Sehaty_Plus.Application.Common.Types;
 using Sehaty_Plus.Application.Feature.Clinc.Commands.AddClinc;
 
@@ -13,7 +13,7 @@ namespace Sehaty_Plus.Controllers
         [HasPermission(Permissions.AddClinic)]
         public async Task<ActionResult<Result>> AddClinc([FromBody] AddClinicDto addClinicDto)
         {
-            var result = await mediator.Send(new AddClinc(User.GetUserId()!, addClinicDto));
+            var result = await mediator.Send(new AddClinc(User.GetUserId()!.ToString(), addClinicDto));
             return result.AsNoContentResult();
         }
     }
