@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Sehaty_Plus.Application.Common.Interfaces.Persistence;
 using Sehaty_Plus.Domain.Common;
 using System.Reflection;
@@ -26,7 +26,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
               .Where(fk => fk.DeleteBehavior == DeleteBehavior.Cascade && !fk.IsOwnership);
         foreach (var fk in cascade)
             fk.DeleteBehavior = DeleteBehavior.Restrict;
-       
+
         base.OnModelCreating(modelBuilder);
     }
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -48,6 +48,4 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         }
         return base.SaveChangesAsync(cancellationToken);
     }
-    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
-          => Database.BeginTransactionAsync(cancellationToken);
 }

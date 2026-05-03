@@ -20,7 +20,7 @@ using Sehaty_Plus.Application.Feature.Patients.Errors;
 using Sehaty_Plus.Application.Feature.Users.Commands.RegisterDoctor;
 using Sehaty_Plus.Application.Feature.Users.Commands.RegisterPatient;
 using Sehaty_Plus.Application.Feature.Users.Commands.RegisterUser;
-using Sehaty_Plus.Infrastructure.Persistence;
+using Sehaty_Plus.Domain.Enums;
 using Sehaty_Plus.Infrastructure.Persistence.Data;
 using System.Security.Cryptography;
 using System.Text;
@@ -30,6 +30,7 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
     public class AuthService(
         UserManager<ApplicationUser> _userManager,
         IApplicationDbContext _context,
+        IUnitOfWork _unitOfWork,
         IJwtProvider _jwtProvider,
         IEmailSenderService _emailSenderService,
         SignInManager<ApplicationUser> _signInManager,
@@ -144,55 +145,38 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
                 return Result.Failure(UserErrors.DuplicatedPhoneNumber);
             if (request.NationalId.Length != 14 || !request.NationalId.All(char.IsDigit))
                 return Result.Failure(PateintErrors.InvalidNationalId);
-            var dbContext = (ApplicationDbContext)_context;
-            var strategy = dbContext.Database.CreateExecutionStrategy();
-            var result = await strategy.ExecuteAsync(async () =>
-             {
-                 await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
-                 try
-                 {
-                     var user = new ApplicationUser
-                     {
-                         Email = request.Email,
-                         UserName = request.Email,
-                         FirstName = request.FirstName,
-                         LastName = request.LastName,
-                         PhoneNumber = request.PhoneNumber,
-                         Gender = request.Gender,
-                     };
 
-                     var result = await _userManager.CreateAsync(user, request.Password);
+            using var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
+            try
+            {
+                var user = new ApplicationUser
+                {
+                    Email = request.Email,
+                    UserName = request.Email,
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    PhoneNumber = request.PhoneNumber,
+                    Gender = request.Gender,
+                };
 
-                     if (!result.Succeeded)
-                     {
-                         await transaction.RollbackAsync(cancellationToken);
-                         return Result.Failure(UserErrors.InvalidCredentials);
+                var createResult = await _userManager.CreateAsync(user, request.Password);
 
-                     }
-                     //var patient = new Patient
-                     //{
-                     //    UserId = user.Id,
-                     //    NationalId = request.NationalId,
-                     //    DateOfBirth = request.DateOfBirth,
-                     //    BloodType = request.BloodType,
-                     //    EmergencyContact = request.EmergencyContact,
-                     //    Allergies = request.Allergies
-                     //};
+                if (!createResult.Succeeded)
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                    return Result.Failure(UserErrors.InvalidCredentials);
+                }
 
-                     //await _context.Patients.AddAsync(patient);
-                     await _userManager.AddToRoleAsync(user, DefaultRoles.Patient.Name);
-                     await _context.SaveChangesAsync(cancellationToken);
-
-                     await transaction.CommitAsync(cancellationToken);
-                     return Result.Success();
-                 }
-                 catch (Exception)
-                 {
-                     await transaction.RollbackAsync(cancellationToken);
-                     return Result.Failure(UserErrors.InvalidCredentials);
-                 }
-             });
-            return result;
+                await _userManager.AddToRoleAsync(user, DefaultRoles.Patient.Name);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
+                return Result.Success();
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                return Result.Failure(UserErrors.InvalidCredentials);
+            }
         }
 
         public async Task<Result> RegisterDoctorAsync(RegisterDoctor request, CancellationToken cancellationToken)
@@ -203,61 +187,46 @@ namespace Sehaty_Plus.Infrastructure.Services.Auth
             if (request.Password != request.ConfirmPassword)
                 return Result.Failure(UserErrors.MissMatchPassword);
 
-            if (await _context.Doctors.AnyAsync(x => x.LicenseNumber == request.LicenseNumber, cancellationToken))
+            if (await _unitOfWork.Doctors.IsExist(x => x.LicenseNumber == request.LicenseNumber, cancellationToken))
                 return Result.Failure(UserErrors.InvalidCredentials);
 
-            var dbContext = (ApplicationDbContext)_context;
-            var strategy = dbContext.Database.CreateExecutionStrategy();
+            using var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
 
-            return await strategy.ExecuteAsync(async () =>
+            try
             {
-                await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
-
-                try
+                var doctor = new Doctor
                 {
-                    var user = new ApplicationUser
-                    {
-                        Email = request.Email,
-                        UserName = request.Email,
-                        FirstName = request.FirstName,
-                        LastName = request.LastName,
-                        PhoneNumber = request.PhoneNumber,
-                        Gender = request.Gender,
-                    };
-
-                    var createResult = await _userManager.CreateAsync(user, request.Password);
-
-                    if (!createResult.Succeeded)
-                    {
-                        var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
-                        throw new Exception($"User creation failed: {errors}");
-                    }
-
-                    //var doctor = new Doctor
-                    //{
-                    //    UserId = user.Id,
-                    //    LicenseNumber = request.LicenseNumber,
-                    //    YearsOfExperience = request.YearsOfExperience,
-                    //    Biography = request.Biography,
-                    //    Education = request.Education,
-                    //    SpecializationId = request.SpecializationId,
-                    //    IsVerified = false
-                    //};
-
-                    //await dbContext.Doctors.AddAsync(doctor, cancellationToken);
-                    //await _userManager.AddToRoleAsync(user, DefaultRoles.Doctor.Name);
-                    await dbContext.SaveChangesAsync(cancellationToken);
-                    await transaction.CommitAsync(cancellationToken);
-
-                    return Result.Success();
-                }
-                catch (Exception)
+                    Email = request.Email,
+                    UserName = request.Email,
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    PhoneNumber = request.PhoneNumber,
+                    Gender = request.Gender,
+                    UserType = UserType.Doctor,
+                    LicenseNumber = request.LicenseNumber,
+                    YearsOfExperience = request.YearsOfExperience,
+                    Biography = request.Biography,
+                    Education = request.Education,
+                    SpecializationId = request.SpecializationId,
+                    IsVerified = false
+                };
+                var createResult = await _userManager.CreateAsync(doctor, request.Password);
+                if (!createResult.Succeeded)
                 {
                     await transaction.RollbackAsync(cancellationToken);
                     return Result.Failure(UserErrors.InvalidCredentials);
                 }
-            });
+                await _userManager.AddToRoleAsync(doctor, DefaultRoles.Doctor.Name);
+                await transaction.CommitAsync(cancellationToken);
+                return Result.Success();
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                return Result.Failure(UserErrors.InvalidCredentials);
+            }
         }
+
 
         public async Task<Result> RegisterUserAsync(RegisterUser request, CancellationToken cancellationToken)
         {

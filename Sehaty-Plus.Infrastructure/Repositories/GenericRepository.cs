@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Sehaty_Plus.Application.Common.Interfaces.Persistence;
 using Sehaty_Plus.Application.Common.Interfaces.Repositories;
+using Sehaty_Plus.Infrastructure.Persistence;
+using System.Linq.Expressions;
 
 namespace Sehaty_Plus.Infrastructure.Repositories
 {
@@ -27,5 +30,49 @@ namespace Sehaty_Plus.Infrastructure.Repositories
             _dbSet.Remove(entity);
             return Task.CompletedTask;
         }
+        public async Task<List<T>> GetAll(CancellationToken cancellationToken = default)
+            => await _dbSet.ToListAsync(cancellationToken);
+
+        public async Task<bool> IsExist(Expression<Func<T, bool>> Criteria, CancellationToken cancellationToken = default)
+            => await _dbSet.AnyAsync(Criteria, cancellationToken);
+
+        public async Task<bool> Any(CancellationToken cancellationToken = default)
+            => await _dbSet.AnyAsync(cancellationToken);
+
+        public IQueryable<T> FromSqlRaw(string sql)
+            => _dbSet.FromSqlRaw(sql);
+
+        public IQueryable<T> AsQueryable()
+            => _dbSet.AsQueryable();
+
+        public async Task<List<T>> GetAll(Expression<Func<T, object>> Include, CancellationToken cancellationToken = default)
+            => await _dbSet.Include(Include).ToListAsync(cancellationToken);
+
+        public async Task<T> GetFirstAsync(CancellationToken cancellationToken = default)
+            => await _dbSet.FirstOrDefaultAsync(cancellationToken) ?? Activator.CreateInstance<T>();
+
+        public async Task<T?> GetByCriteria(Expression<Func<T, bool>> Criteria, CancellationToken cancellationToken = default)
+            => await _dbSet.Where(Criteria).SingleOrDefaultAsync(cancellationToken);
+
+        public async Task<List<T>> GetListByCriteria(Expression<Func<T, bool>> Criteria, CancellationToken cancellationToken = default)
+            => await _dbSet.Where(Criteria).ToListAsync(cancellationToken);
+
+        public async Task<List<T>> GetListByCriteria(Expression<Func<T, bool>> Criteria, Expression<Func<T, object>> Include, CancellationToken cancellationToken = default)
+            => await _dbSet.Include(Include).Where(Criteria).ToListAsync(cancellationToken);
+
+        public async Task<T?> GetByCriteria(Expression<Func<T, bool>> Criteria, Expression<Func<T, object>> Include, CancellationToken cancellationToken = default)
+            => await _dbSet.Include(Include).FirstOrDefaultAsync(Criteria, cancellationToken);
+        public async Task<T?> GetById(long id, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include, CancellationToken cancellationToken = default)
+        {
+            var query = _dbSet.AsQueryable();
+            if (include != null)
+                query = include(query);
+            return await query.FirstOrDefaultAsync(e => EF.Property<long>(e, "Id") == id, cancellationToken);
+        }
+
+        public async Task<T?> GetByIdAsync(long id, CancellationToken cancellationToken = default)
+            => await _dbSet.FindAsync(new object[] { id }, cancellationToken);
+
     }
 }
+

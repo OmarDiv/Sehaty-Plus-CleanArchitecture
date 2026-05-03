@@ -27,9 +27,9 @@ namespace Sehaty_Plus.Application.Feature.Clinc.Commands.AddClinc
 
         public async Task<Result> Handle(AddClinc request, CancellationToken cancellationToken)
         {
+            using var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
             try
             {
-                await _unitOfWork.BeginTransactionAsync(cancellationToken);
                 var doctor = await _unitOfWork.Doctors.GetByIdAsync(request.DoctorId, cancellationToken);
 
                 if (await _unitOfWork.Clinics.ExistsByNameAsync(request.Dto.Name, null, cancellationToken))
@@ -51,7 +51,7 @@ namespace Sehaty_Plus.Application.Feature.Clinc.Commands.AddClinc
                     IsActive = true
                 };
                 //// Add clinic to repository
-                //await _clinicRepository.AddAsync(clinic, cancellationToken);
+                //await _unitOfWork.Clinics.AddAsync(clinic, cancellationToken);
                 //// Create DoctorClinic relationship
                 //var doctorClinic = new DoctorClinic
                 //{
@@ -61,14 +61,16 @@ namespace Sehaty_Plus.Application.Feature.Clinc.Commands.AddClinc
                 //    ConsultationFee = request.Dto.ConsultationFee
                 //};
                 //// Add DoctorClinic to repository
-                //await _doctorClinicRepository.AddAsync(doctorClinic, cancellationToken);
+                //await _unitOfWork.DoctorClinics.AddAsync(doctorClinic, cancellationToken);
+
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
             }
             catch (Exception)
             {
-
+                await transaction.RollbackAsync(cancellationToken);
                 throw;
             }
-
 
             return Result.Success();
         }
